@@ -24,11 +24,18 @@ library(tidyverse)
 
 
 ```{r load-data}
-# load your data 
+read.csv("data/formula_e_race_results.csv")
 
 
 
 
 ```
 
+```{r summary}
+formula_e_race_results %>%
+  group_by(driver) %>%
+  count(season)
 
+
+
+```
