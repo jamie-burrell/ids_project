@@ -49,7 +49,7 @@ formula_e_race_results %>%
 
 ``` {r graph relationship}
 formula_e_race_results %>%
-  filter(season != 7) %>%
+  filter(season != 7, rank_num <= 3) %>%
 ggplot(mapping = 
          aes(x = race_num,
              y = rank_num,
@@ -60,5 +60,23 @@ ggplot(mapping =
     x = "team",
     y = "place finished",
     title = "relationship between team and results") +
-  facet_wrap(~season)
+  facet_wrap(~season, ncol = 2) 
 ```
+``` {r season winners}
+formula_e_race_results %>%
+  filter(season != "7") %>%
+  group_by(season, team_group) %>%
+  summarize(
+    season_points = sum(points)
+  ) %>%
+  arrange(desc(season_points)) %>%
+  filter(season == "6")
+  
+
+
+```
+
+
+
+
+
