@@ -35,12 +35,13 @@ read.csv("data/formula_e_race_results.csv")
 formula_e_race_results %>%
   filter(season == "1") %>%
   ggplot( mapping = 
-            aes(x = race_name,
-                y = rank_num,
+            aes(x = race_num,
+                y = points,
                 colour = driver
                 )) +
   geom_point() +
-  facet_wrap(~ driver, ncol = 2)
+  geom_line() +
+  facet_wrap(~ team_group, ncol = 2)
 
 
 
