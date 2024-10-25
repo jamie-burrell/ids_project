@@ -75,8 +75,25 @@ formula_e_race_results %>%
 
 
 ```
-
-
-
-
-
+``` {r season winners graphs}
+formula_e_race_results %>%
+  filter(season != 7) %>%
+  group_by(season, team_group) %>%
+  summarise(final_points = sum(points)) %>%
+  ggplot( mapping = 
+            aes(x = season,
+                y = final_points)) + 
+    geom_point() +
+    facet_wrap(~ team_group, ncol = 2)
+```
+```{r bar}
+formula_e_race_results %>%
+  filter(season != 7) %>%
+  group_by(season, team_group) %>%
+  summarise(final_points = sum(points)) %>%
+  ggplot( mapping = 
+            aes(y = final_points,
+                x = team_group,
+                colour = season)) + 
+    geom_bar()
+```
