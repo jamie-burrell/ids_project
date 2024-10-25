@@ -33,8 +33,15 @@ read.csv("data/formula_e_race_results.csv")
 
 ```{r summary}
 formula_e_race_results %>%
-  group_by(driver) %>%
-  count(season)
+  filter(season == "1") %>%
+  ggplot( mapping = 
+            aes(x = race_name,
+                y = rank_num,
+                colour = driver
+                )) +
+  geom_point() +
+  facet_wrap(~ driver, ncol = 2)
+
 
 
 
