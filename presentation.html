@@ -139,20 +139,6 @@ glance(model)
 
 ---
 
-
-``` r
-formula_e_race_results %&gt;%
-  filter(season == "1") %&gt;%
-  ggplot( mapping = 
-            aes(x = race_num,
-                y = points,
-                colour = driver
-                )) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~ team_group, ncol = 2)
-```
-
 &lt;img src="presentation_files/figure-html/plot from investigation-1.png" width="80%" /&gt;
 ---
 
