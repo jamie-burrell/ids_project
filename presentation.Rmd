@@ -40,6 +40,7 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 ```{r load-data, include=FALSE}
 # Load your data here
+fromula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
 ```
 
@@ -138,6 +139,21 @@ ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, co
   theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
 ```
 
+---
+
+```{r plot from investigation}
+formula_e_race_results %>%
+  filter(season == "1") %>%
+  ggplot( mapping = 
+            aes(x = race_num,
+                y = points,
+                colour = driver
+                )) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ team_group, ncol = 2)
+
+```
 ---
 
 ## Plot and text
