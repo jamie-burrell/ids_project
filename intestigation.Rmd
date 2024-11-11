@@ -70,7 +70,7 @@ formula_e_race_results %>%
     season_points = sum(points)
   ) %>%
   arrange(desc(season_points)) %>%
-  filter(season == "6")
+  filter(season == "5")
   
 
 
