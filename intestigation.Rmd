@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-lib, message = FALSE}
 library(tidyverse)
+library(tidymodels)
 # Add any other libraries here
 
 
@@ -105,3 +106,13 @@ ggplot(filtered_data, mapping = aes(x = grid, y = rank_num)) +
  
 ```
 
+
+```{r Linear Model of above graphs} 
+driver_grid_rank_reg <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(rank_num ~ grid + driver, data = filtered_data)
+
+tidy(driver_grid_rank_reg)
+  
+glance(driver_grid_rank_reg)$adj.r.squared
+```
