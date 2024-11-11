@@ -24,7 +24,7 @@ library(tidyverse)
 
 
 ```{r load-data}
-read.csv("data/formula_e_race_results.csv")
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
 
 
