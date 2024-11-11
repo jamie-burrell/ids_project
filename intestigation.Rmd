@@ -116,3 +116,10 @@ tidy(driver_grid_rank_reg)
   
 glance(driver_grid_rank_reg)$adj.r.squared
 ```
+```{r residuals plot}
+driver_grid_rank_aug <- augment(driver_grid_rank_reg$rank_num)
+
+driver_grid_rank_aug
+
+
+```
