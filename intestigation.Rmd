@@ -24,7 +24,7 @@ library(tidyverse)
 
 
 ```{r load-data}
-read.csv("data/formula_e_race_results.csv")
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
 
 
@@ -35,12 +35,13 @@ read.csv("data/formula_e_race_results.csv")
 formula_e_race_results %>%
   filter(season == "1") %>%
   ggplot( mapping = 
-            aes(x = race_name,
-                y = rank_num,
+            aes(x = race_num,
+                y = points,
                 colour = driver
                 )) +
   geom_point() +
-  facet_wrap(~ driver, ncol = 2)
+  geom_line() +
+  facet_wrap(~ team_group, ncol = 2)
 
 
 
@@ -70,13 +71,37 @@ formula_e_race_results %>%
     season_points = sum(points)
   ) %>%
   arrange(desc(season_points)) %>%
-  filter(season == "5")
+  filter(season == "6")
+
   
 
 
 ```
-
-
-
-
+``` {r team success graphs}
+formula_e_race_results %>%
+  filter(season != 7) %>%
+  group_by(season, team_group) %>%
+  summarise(final_points = sum(points)) %>%
+  ggplot( mapping = 
+            aes(x = season,
+                y = final_points)) + 
+    geom_point() +
+    facet_wrap(~ team_group, ncol = 2)
+```
+```{r grid position anf final ranking}
+filtered_data <- formula_e_race_results %>%
+  filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
+  filter(grid!="PL")
+  
+filtered_data$grid <- as.numeric(filtered_data$grid) 
+ggplot(filtered_data, mapping = aes(x = grid, y = rank_num)) +
+  geom_jitter() +
+  labs(title = "Grid Position vs. Final Rank Position",
+       x = "Grid Position",
+       y = "Final Rank Position") +
+  theme_minimal() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~driver, scales = "free")
+ 
+```
 
