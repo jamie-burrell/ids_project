@@ -16,7 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-lib, message = FALSE}
 library(tidyverse)
-# Add any other libraries here
+library(ggplot2)
+library(dplyr)
 
 
 
@@ -24,11 +25,7 @@ library(tidyverse)
 
 
 ```{r load-data}
-read.csv("data/formula_e_race_results.csv")
-
-
-
-
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 ```
 
 ```{r summary}
@@ -41,9 +38,6 @@ formula_e_race_results %>%
                 )) +
   geom_point() +
   facet_wrap(~ driver, ncol = 2)
-
-
-
 
 ```
 
@@ -71,10 +65,9 @@ formula_e_race_results %>%
   ) %>%
   arrange(desc(season_points)) %>%
   filter(season == "6")
-  
-
 
 ```
+
 ``` {r season winners graphs}
 formula_e_race_results %>%
   filter(season != 7) %>%
@@ -86,14 +79,47 @@ formula_e_race_results %>%
     geom_point() +
     facet_wrap(~ team_group, ncol = 2)
 ```
-```{r bar}
-formula_e_race_results %>%
-  filter(season != 7) %>%
-  group_by(season, team_group) %>%
-  summarise(final_points = sum(points)) %>%
-  ggplot( mapping = 
-            aes(y = final_points,
-                x = team_group,
-                colour = season)) + 
-    geom_bar()
+
+```{r grid position and final ranking}
+filtered_data <- formula_e_race_results %>%
+  filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
+  filter(grid!="PL")
+  
+filtered_data$grid <- as.numeric(filtered_data$grid) 
+ggplot(filtered_data, mapping = aes(x = grid, y = rank_num)) +
+  geom_jitter() +
+  labs(title = "grid position vs. final rank position",
+       x = "Grid position",
+       y = "Final rank position") +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~driver, scales = "free")
+ 
+```
+
+facet_wrap(~driver, scales = "free")
+
+
+```{r linear regression grid and rank}
+library(tidymodels)
+
+filtered_data <- formula_e_race_results %>%
+  filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
+  filter(grid!="PL")
+  
+filtered_data$grid <- as.numeric(filtered_data$grid) 
+
+formula_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(rank_num ~ grid, data = filtered_data)
+
+formula_fit_tidy <- tidy(formula_fit$fit)
+print(formula_fit_tidy) 
+ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "effect of starting grid Position on final rank",
+       x = "grid position",
+       y = "rank number") 
+
+
 ```
