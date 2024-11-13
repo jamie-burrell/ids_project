@@ -19,8 +19,7 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 
-
-
+library(tidymodels)
 ```
 
 
@@ -32,12 +31,13 @@ formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 formula_e_race_results %>%
   filter(season == "1") %>%
   ggplot( mapping = 
-            aes(x = race_name,
-                y = rank_num,
+            aes(x = race_num,
+                y = points,
                 colour = driver
                 )) +
   geom_point() +
-  facet_wrap(~ driver, ncol = 2)
+  geom_line() +
+  facet_wrap(~ team_group, ncol = 2)
 
 ```
 
@@ -56,6 +56,7 @@ ggplot(mapping =
     title = "relationship between team and results") +
   facet_wrap(~season, ncol = 2) 
 ```
+
 ``` {r season winners}
 formula_e_race_results %>%
   filter(season != "7") %>%
@@ -66,9 +67,11 @@ formula_e_race_results %>%
   arrange(desc(season_points)) %>%
   filter(season == "6")
 
+
 ```
 
-``` {r season winners graphs}
+
+``` {r team success graphs}
 formula_e_race_results %>%
   filter(season != 7) %>%
   group_by(season, team_group) %>%
@@ -79,6 +82,7 @@ formula_e_race_results %>%
     geom_point() +
     facet_wrap(~ team_group, ncol = 2)
 ```
+
 
 ```{r grid position and final ranking}
 filtered_data <- formula_e_race_results %>%
@@ -121,5 +125,21 @@ ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
        x = "grid position",
        y = "rank number") 
 
+```
 
+
+```{r Linear Model of above graphs} 
+driver_grid_rank_reg <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(rank_num ~ grid + driver, data = filtered_data)
+
+tidy(driver_grid_rank_reg)
+  
+glance(driver_grid_rank_reg)$adj.r.squared
+```
+
+```{r residuals plot}
+driver_grid_rank_aug <- augment(driver_grid_rank_reg$rank_num)
+
+driver_grid_rank_aug
 ```
