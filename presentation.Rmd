@@ -53,7 +53,13 @@ style_xaringan(
 
 class: center, middle
 
-## A statement of the overall goal / research question
+##Overall Goal
+
+
+- How does the grid number affect the rank position for the four drivers who have all been in 69 races (Daniel Abt, Jérôme D’Ambrosio, Lucas di Grassi and Sam Bird)?
+
+- We selected the Formula E data set with a view to analysing the factors which affect driver performance. We were keen to explore how the team, the track or even the age of the driver affects how well they perform in Formula E races.
+
 
 ---
 
