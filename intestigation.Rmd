@@ -143,3 +143,10 @@ driver_grid_rank_aug <- augment(driver_grid_rank_reg$rank_num)
 
 driver_grid_rank_aug
 ```
+
+```{r Top Drivers, Teams Boxplots}
+formula_e_race_results %>%
+  filter(count(driver), n >= 65)
+
+
+```
