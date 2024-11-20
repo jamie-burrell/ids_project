@@ -143,3 +143,40 @@ driver_grid_rank_aug <- augment(driver_grid_rank_reg$rank_num)
 
 driver_grid_rank_aug
 ```
+
+```{r Top Drivers, Teams Boxplots}
+formula_e_race_results %>%
+  filter(driver %in% c("Jean-Éric Vergne", "Sébastien Buemi", "Lucas di Grassi", "Sam Bird", "António Félix da Costa")) %>%
+  ggplot(mapping = aes(
+    x = driver,
+    y = rank_num,
+    fill = team_group
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver",
+    title = "Top 5 Drivers",
+    fill = "Team"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left")
+
+
+formula_e_race_results %>%
+  filter(team_group %in% c("Audi", "Techeetah", "Nissan-Renault", "Mahindra", "Virgin")) %>%
+  ggplot(mapping = aes(
+    x = team_group,
+    y = rank_num,
+    fill = team_group
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Team",
+    title = "Top 5 Teams"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```

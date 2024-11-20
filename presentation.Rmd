@@ -1,7 +1,7 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
-author: "Team name <br> Names of team members"
+title: "IDS Group Project"
+subtitle: "Formula E Race Result"
+author: "Table 5 Tekkers <br> Joel, Jamie, Yara, Farhan, Hylda, Aiman"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output:
@@ -47,13 +47,19 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 #Background image
 style_xaringan(
-  title_slide_background_image = "img/confetti.jpg"
+  title_slide_background_image = "img/intro picture.jpg"
 )
 ```
 
 class: center, middle
 
-## A statement of the overall goal / research question
+##Overall Goal
+
+
+- How does the grid number affect the rank position for the four drivers who have all been in 69 races (Daniel Abt, Jérôme D’Ambrosio, Lucas di Grassi and Sam Bird)?
+
+- We selected the Formula E data set with a view to analysing the factors which affect driver performance. We were keen to explore how the team, the track or even the age of the driver affects how well they perform in Formula E races.
+
 
 ---
 
