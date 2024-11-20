@@ -119,7 +119,7 @@ formula_fit <- linear_reg() %>%
 formula_fit_tidy <- tidy(formula_fit$fit)
 print(formula_fit_tidy) 
 ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
-  geom_point() +
+  geom_jitter() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(title = "effect of starting grid Position on final rank",
        x = "grid position",
