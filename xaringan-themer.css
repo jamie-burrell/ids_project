@@ -135,11 +135,7 @@ a, a > code {
 }
 .title-slide {
   background-color: var(--title-slide-background-color);
-<<<<<<< HEAD
-  background-image: url("img/download.jpeg");
-=======
-  background-image: url("img/confetti.jpg");
->>>>>>> acc1e5fa295d5b5e23e8ea5d1e94b744ea2e315d
+  background-image: url("img/intro picture.jpg");
   background-size: cover;
 }
 .title-slide .remark-slide-number {

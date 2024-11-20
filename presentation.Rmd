@@ -1,6 +1,6 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
+title: "IDS Group Project"
+subtitle: "Formula E Race Result"
 author: "Table 5 Tekkers <br> Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -40,28 +40,18 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 
 ```{r load-data, include=FALSE}
 # Load your data here
-<<<<<<< HEAD
-=======
 formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
->>>>>>> acc1e5fa295d5b5e23e8ea5d1e94b744ea2e315d
 ```
 
 ```{r include=FALSE}
 
 #Background image
 style_xaringan(
-<<<<<<< HEAD
-  title_slide_background_image = "img/download.jpeg",
+  title_slide_background_image = "img/intro picture.jpg",
   title_slide_text_color = "white",
   background_color = "#1F4257", "#F97B64"
-  
-=======
-  title_slide_background_image = "img/confetti.jpg"
->>>>>>> acc1e5fa295d5b5e23e8ea5d1e94b744ea2e315d
 )
-
-
 
 ```
 class: center, middle
