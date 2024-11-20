@@ -233,7 +233,6 @@ formula_e_race_results <- formula_e_race_results %>%
       str_detect(time_retired, "D") ~ FALSE,
       str_detect(time_retired, "C") ~ FALSE,
       str_detect(time_retired, "B") ~ FALSE,
-      time_retired == "" ~ NA,
       TRUE ~ TRUE
     )
   )
