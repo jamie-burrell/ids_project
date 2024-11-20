@@ -205,9 +205,9 @@ formula_e_race_results <- formula_e_race_results %>%
       str_detect(race_name, "Diriyah") ~ "Diriyah",
       str_detect(race_name, "Rome") ~ "Rome",
       str_detect(race_name, "Santiago") ~ "Santiago",
-      str_detect(race_name, "Zurich") ~ "Zurich",
       str_detect(race_name, "Sanya") ~ "Sanya",
       str_detect(race_name, "Swiss") ~ "Bern",
+      TRUE ~ "Zurich"
     )
   )
 ```
