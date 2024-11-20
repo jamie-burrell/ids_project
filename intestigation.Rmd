@@ -152,7 +152,7 @@ formula_e_race_results %>%
     y = rank_num,
     fill = team_group
   )) +
-  geom_boxplot() +
+  geom_boxplot(coef = 1) +
   labs(
     y = "Final Position",
     x = "Driver",
@@ -170,7 +170,7 @@ formula_e_race_results %>%
     y = rank_num,
     fill = team_group
   )) +
-  geom_boxplot() +
+  geom_boxplot(coef = 1) +
   labs(
     y = "Final Position",
     x = "Team",
