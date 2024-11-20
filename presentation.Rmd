@@ -50,7 +50,7 @@ formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 style_xaringan(
   title_slide_background_image = "img/intro picture.jpg",
   title_slide_text_color = "white",
-  #background_color = "#1F4257", "#F97B64"
+  background_color = "#1F4257", "#F97B64"
 )
 
 ```
