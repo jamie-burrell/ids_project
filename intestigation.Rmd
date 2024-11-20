@@ -104,7 +104,6 @@ facet_wrap(~driver, scales = "free")
 
 
 ```{r linear regression grid and rank}
-library(tidymodels)
 
 filtered_data <- formula_e_race_results %>%
   filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
@@ -119,7 +118,7 @@ formula_fit <- linear_reg() %>%
 formula_fit_tidy <- tidy(formula_fit$fit)
 print(formula_fit_tidy) 
 ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
-  geom_jitter() +
+  geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   labs(title = "effect of starting grid Position on final rank",
        x = "grid position",
@@ -210,5 +209,3 @@ formula_e_race_results <- formula_e_race_results %>%
       str_detect(race_name, "Swiss") ~ "Bern",
     )
   )
-
-```
