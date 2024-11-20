@@ -180,3 +180,35 @@ formula_e_race_results %>%
   theme(legend.position = "none")
 
 ```
+
+```{r location}
+
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    location  = case_when(
+      str_detect(race_name, "Beijing") ~ "Beijing",
+      str_detect(race_name, "Punta del Este") ~ "Punta del Este",
+      str_detect(race_name, "Putrajaya") ~ "Putrajaya",
+      str_detect(race_name, "Berlin") ~ "Berlin",
+      str_detect(race_name, "Buenos Aires") ~ "Buenos Aires",
+      str_detect(race_name, "London") ~ "London",
+      str_detect(race_name, "Long Beach") ~ "Long Beach",
+      str_detect(race_name, "Miami") ~ "Miami",
+      str_detect(race_name, "Monaco") ~ "Monaco",
+      str_detect(race_name, "Moscow") ~ "Moscow",
+      str_detect(race_name, "Hong Kong") ~ "Hong Kong",
+      str_detect(race_name, "Marrakesh") ~ "Marrakesh",
+      str_detect(race_name, "Mexico City") ~ "Mexico City",
+      str_detect(race_name, "Paris") ~ "Paris",
+      str_detect(race_name, "Montreal") ~ "Montreal",
+      str_detect(race_name, "New York City") ~ "New York City",
+      str_detect(race_name, "Diriyah") ~ "Diriyah",
+      str_detect(race_name, "Rome") ~ "Rome",
+      str_detect(race_name, "Santiago") ~ "Santiago",
+      str_detect(race_name, "Zürich") ~ "Zurich",
+      str_detect(race_name, "Sanya") ~ "Sanya",
+      str_detect(race_name, "Swiss") ~ "Bern",
+    )
+  )
+
+```
