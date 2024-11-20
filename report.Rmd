@@ -12,6 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load-lib, include = FALSE}
 library(tidyverse)
+library(tidymodels)
 # Add any other libraries here
 
 
@@ -23,6 +24,7 @@ library(tidyverse)
 # load your data here and any pre-processing/cleaning 
 #  that you need for your report.
 
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
 
 
@@ -48,7 +50,16 @@ If you got your data off the web, make sure to state the retrieval date.
 
 
 
+Our data set contains data from Formula E races across Seasons 1-7. There are 1,480 observations, each representing a particular driver in a particular race. There are 17 variables including the driver, the driver's team, the season number, the race number within the season and the season points awarded.
 
+Season number is between 1 and 7, with Season 7 being incomplete as the data set was produced during this season. (Season 7 contains only 48 observations compared to 180-290 observations in the other 6 seasons)
+
+Race number varies between 1 and 13 showing that there are up to 13 races in any given season. This is sequential meaning race number can be used to track performance from start to end of the season.
+
+Season points shows how a driver performed during the race. A driver who scored a non-zero number of season points finished in the top 10, with more points meaning a higher finish. A season point score of 0 means the driver did not finish in the top 10 for the race.
+
+*Citation*
+M. Landry. (2021). 'Formula E Championship'. Available at https://www.kaggle.com/datasets/mlandry/formula-e-championship/data. Accessed 18/10/2024.
 
 
 ## Findings
@@ -75,6 +86,5 @@ Make sure to hide your code with  `echo = FALSE` unless the point you are trying
 
 ## References
 
-List any references here. You should, at a minimum, list your data source.
-
+M. Landry. (2021). 'Formula E Championship'. Available at https://www.kaggle.com/datasets/mlandry/formula-e-championship/data. Accessed 18/10/2024.
 
