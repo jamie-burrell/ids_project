@@ -24,7 +24,7 @@ library(tidymodels)
 
 
 ```{r load-data}
-formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='latin1')
 ```
 
 ```{r summary}
@@ -182,9 +182,10 @@ formula_e_race_results %>%
 
 ```{r location}
 
+
 formula_e_race_results <- formula_e_race_results %>%
   mutate(
-    location  = case_when(
+    location = case_when(
       str_detect(race_name, "Beijing") ~ "Beijing",
       str_detect(race_name, "Punta del Este") ~ "Punta del Este",
       str_detect(race_name, "Putrajaya") ~ "Putrajaya",
@@ -204,8 +205,41 @@ formula_e_race_results <- formula_e_race_results %>%
       str_detect(race_name, "Diriyah") ~ "Diriyah",
       str_detect(race_name, "Rome") ~ "Rome",
       str_detect(race_name, "Santiago") ~ "Santiago",
-      str_detect(race_name, "Zürich") ~ "Zurich",
+      str_detect(race_name, "Zurich") ~ "Zurich",
       str_detect(race_name, "Sanya") ~ "Sanya",
       str_detect(race_name, "Swiss") ~ "Bern",
     )
   )
+```
+
+``` {r race-completion}
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    finished = case_when(
+      str_detect(time_retired, "W") ~ FALSE,
+      str_detect(time_retired, "U") ~ FALSE,
+      str_detect(time_retired, "T") ~ FALSE,
+      str_detect(time_retired, "A") ~ FALSE,
+      str_detect(time_retired, "S") ~ FALSE,
+      str_detect(time_retired, "R") ~ FALSE,
+      str_detect(time_retired, "w") ~ FALSE,
+      str_detect(time_retired, "P") ~ FALSE,
+      str_detect(time_retired, "M") ~ FALSE,
+      str_detect(time_retired, "O") ~ FALSE,
+      str_detect(time_retired, "H") ~ FALSE,
+      str_detect(time_retired, "G") ~ FALSE,
+      str_detect(time_retired, "F") ~ FALSE,
+      str_detect(time_retired, "E") ~ FALSE,
+      str_detect(time_retired, "D") ~ FALSE,
+      str_detect(time_retired, "C") ~ FALSE,
+      str_detect(time_retired, "B") ~ FALSE,
+      time_retired == "" ~ NA,
+      TRUE ~ TRUE
+    )
+  )
+```
+
+
+``` {r}
+if(any(is.na(time_retired))) { print("Input string contains NA values") }
+```
