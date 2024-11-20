@@ -1,6 +1,6 @@
 ---
-title: "Presentation title"
-subtitle: "Presentation subtitle (if any)"
+title: "IDS Group Project"
+subtitle: "Formula E Race Result"
 author: "Table 5 Tekkers <br> Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi"
 institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
@@ -51,8 +51,6 @@ style_xaringan(
   title_slide_background_image = "img/download.jpeg",
   title_slide_text_color = "white",
   background_color = "#1F4257", "#F97B64"
-  
-  title_slide_background_image = "img/confetti.jpg"
 )
 
 
