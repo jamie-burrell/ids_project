@@ -247,3 +247,28 @@ raceresults_cleaned <- formula_e_race_results %>%
 
 
 ```
+
+``` {r DNF proprotions per predictor}
+
+prop_DNF <- function(x){
+  group_by(x) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  )
+}
+ 
+
+  
+  
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    y = proportion_DNF,
+    x = location
+  )) +
+  geom_point()
+  
+```
