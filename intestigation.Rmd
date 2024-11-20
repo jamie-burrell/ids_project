@@ -240,6 +240,11 @@ formula_e_race_results <- formula_e_race_results %>%
 ```
 
 
-``` {r}
-if(any(is.na(time_retired))) { print("Input string contains NA values") }
+``` {r cleaning}
+raceresults_cleaned <- formula_e_race_results %>%
+  select(
+    driver, team_group, location, rank_num, finished
+  )
+
+
 ```
