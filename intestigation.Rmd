@@ -317,5 +317,43 @@ raceresults_cleaned %>%                            #drivers >= 20 races
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none") 
+
+raceresults_cleaned %>%                            #team
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group,
+    colour = team_group
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") 
   
+```
+
+
+```{r possible pointplot}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n(),
+    team_group = team_group
+  ) %>%
+  ggplot(mapping = aes(
+    y = proportion_DNF,
+    x = avg_position,
+    colour = team_group
+  )) +
+  geom_point() 
+
+
+
+
 ```
