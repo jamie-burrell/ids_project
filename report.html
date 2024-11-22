@@ -11,12 +11,7 @@
 
 <meta name="author" content="Table_5_tekkers: Aiman, Jamie, Farhan, Hylda, Joel, Yara" />
 
-<<<<<<< HEAD
-<meta name="date" content="2024-11-20" />
-=======
-<meta name="date" content="2024-10-18" />
-<meta name="date" content="2024-11-11" />
->>>>>>> 3f431ef14f467357ac634cbb5881e456c8710859
+<meta name="date" content="2024-11-22" />
 
 <title>Formula E champion analysis</title>
 
@@ -358,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Formula E champion analysis</h1>
 <h4 class="author">Table_5_tekkers: Aiman, Jamie, Farhan, Hylda, Joel,
 Yara</h4>
-<h4 class="date">2024-11-20</h4>
+<h4 class="date">2024-11-22</h4>
 
 </div>
 
@@ -398,12 +393,39 @@ used to track performance from start to end of the season.</p>
 who scored a non-zero number of season points finished in the top 10,
 with more points meaning a higher finish. A season point score of 0
 means the driver did not finish in the top 10 for the race.</p>
+<p>After cleaning the data, we also includes a new variable called
+finish, where we can see whether the driver finish their race or
+not.</p>
 <p><em>Citation</em> M. Landry. (2021). ‘Formula E Championship’.
 Available at <a href="https://www.kaggle.com/datasets/mlandry/formula-e-championship/data" class="uri">https://www.kaggle.com/datasets/mlandry/formula-e-championship/data</a>.
 Accessed 18/10/2024.</p>
 </div>
 <div id="findings" class="section level2">
 <h2>Findings</h2>
+<p>Methodology:</p>
+<ol style="list-style-type: decimal">
+<li><p>Data Cleaning To clean and filter by location, since all race
+locations have a year at the end of the name, we used the function
+“str_detect” to detect a certain word in the race location to filter by
+actual location of races. There were some name inconsistencies, for
+example, “Ad Diriyah” and “Diriyah” were both used, but after
+researching, we concluded they were interchangeable names, and we
+grouped them. A similar problem arose with “Swiss” and “Zurich”, but
+after doing research into Formula E race locations online, “Swiss” races
+were held in Bern, so to remain consistent, we turned “Swiss” into
+“Bern” to differentiate from “Zurich” as all other races were city names
+rather than countries. We also used “retired_time” as a binary variable,
+to detect whether they finished the race or not. We successfully tidied
+the data, making the table only 5 columns so it’s much easier to work
+with.</p></li>
+<li><p>Data Visualisation</p></li>
+<li><p>Modelling We use logistic regression to predict weather the
+driver finishes or not finish the race. We chose logistic regression as
+the model as our output is binary, which is either the driver finished
+their race or not. We use R squared test to see which variable to be
+considered as explanatory variable that affect if the driver finished or
+not.</p></li>
+</ol>
 <p>The write-up of your project and findings go here.</p>
 <p>Think of this as the text of your presentation with some extra detail
 to cover what there was not time to discuss in the presentation. This
