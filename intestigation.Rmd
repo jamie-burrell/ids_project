@@ -262,7 +262,8 @@ raceresults_cleaned %>%                          #bar charts of location v propo
   )) +
   geom_col() +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") 
+  
 
 raceresults_cleaned %>%     #as above but more than one race to remove outliers
   group_by(location) %>%
@@ -328,11 +329,17 @@ raceresults_cleaned %>%                            #team
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = team_group,
-    colour = team_group
+    fill = team_group
+  )) +
+  scale_fill_manual(values = c(
+    "Trulli" = "red"
   )) +
   geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") 
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
   
 ```
 
