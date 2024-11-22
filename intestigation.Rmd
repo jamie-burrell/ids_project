@@ -258,12 +258,44 @@ raceresults_cleaned %>%                          #bar charts of location v propo
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = location,
-    colour = location
+    fill = location
   )) +
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none") 
   
+raceresults_cleaned %>%                          #bar charts of location v proportion of DNF
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location,
+    fill = location
+  )) +
+      scale_fill_manual(values = c(
+    "Santiago" = "#001",
+    "Rome" = "#001",
+    "Putrajaya" = "#001",
+    "Punta del Este" = "#001",
+    "Paris" = "#001",
+    "New York City" = "#001",
+    "Montreal" = "#001",
+    "Monaco" = "#001",
+    "Mexico City" = "#001",
+    "Marrakesh" = "#001",
+    "Long Beach" = "#001",
+    "London" = "#001",
+    "Hong Kong" = "#001",
+    "Diriyah" = "#001",
+    "Buenos Aires" = "#001",
+    "Berlin" = "#001",
+    "Beijing" = "#001"
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 raceresults_cleaned %>%     #as above but more than one race to remove outliers
   group_by(location) %>%
@@ -275,32 +307,11 @@ raceresults_cleaned %>%     #as above but more than one race to remove outliers
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = location,
-    colour = location
+    fill = location
   )) +
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none")
-
-raceresults_cleaned %>%                            #adjusted to number of participants
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    count = n()         
-  ) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF / count,
-    y = location,
-    colour = location
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Location",
-    x = "DNF Rate"
-  )
-#Sanya had 1 race in 2019 in which 6/22 crashed (and 3 malfunctions) 
-#Note 3 highest DNF rates are from those with fewer races - first graph better indicator
 
 
 raceresults_cleaned %>%                            #drivers >= 20 races
