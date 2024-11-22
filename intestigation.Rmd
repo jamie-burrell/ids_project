@@ -250,25 +250,110 @@ raceresults_cleaned <- formula_e_race_results %>%
 
 ``` {r DNF proprotions per predictor}
 
-prop_DNF <- function(x){
-  group_by(x) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished)
-  )
-}
- 
-
-  
-  
-raceresults_cleaned %>%
+raceresults_cleaned %>%                          #bar charts of location v proportion of DNF
   group_by(location) %>%
   summarise(
     proportion_DNF = 1 - mean(finished)
   ) %>%
   ggplot(mapping = aes(
-    y = proportion_DNF,
-    x = location
+    x = proportion_DNF,
+    y = location,
+    colour = location
   )) +
-  geom_point()
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+raceresults_cleaned %>%     #as above but more than one race to remove outliers
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count > 24) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location,
+    colour = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+raceresults_cleaned %>%                            #adjusted to number of participants
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()         
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF / count,
+    y = location,
+    colour = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Location",
+    x = "DNF Rate"
+  )
+#Sanya had 1 race in 2019 in which 6/22 crashed (and 3 malfunctions) 
+#Note 3 highest DNF rates are from those with fewer races - first graph better indicator
+
+
+raceresults_cleaned %>%                            #drivers >= 20 races
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = driver,
+    colour = driver
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") 
+
+raceresults_cleaned %>%                            #team
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group,
+    colour = team_group
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") 
   
+```
+
+
+```{r possible pointplot}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n(),
+    team_group = team_group
+  ) %>%
+  ggplot(mapping = aes(
+    y = proportion_DNF,
+    x = avg_position,
+    colour = team_group
+  )) +
+  geom_point() 
+
+
+
+
 ```
