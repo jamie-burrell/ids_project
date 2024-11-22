@@ -272,3 +272,44 @@ raceresults_cleaned %>%
   geom_point()
   
 ```
+
+
+``` {r model}
+
+raceresults_factored <- raceresults_cleaned %>%
+  mutate(
+    finished_fct = case_when(
+      finished == TRUE ~ "TRUE",
+      finished == FALSE ~ "FALSE"
+    ),
+  finished_fct = fct_relevel(finished_fct, "TRUE", "FALSE"))
+
+
+
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
+
+
+raceresults_rec <- recipe(finished_fct ~ team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+
+
+
+```
