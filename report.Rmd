@@ -74,6 +74,7 @@ We also used “retired_time” as a binary variable, to detect whether they fin
 We successfully tidied the data, making the table only 5 columns so it’s much easier to work with.
 
 2) Data Visualisation
+box plot
 
 3) Modelling 
 The write-up of your project and findings go here. 
