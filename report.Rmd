@@ -58,12 +58,24 @@ Race number varies between 1 and 13 showing that there are up to 13 races in any
 
 Season points shows how a driver performed during the race. A driver who scored a non-zero number of season points finished in the top 10, with more points meaning a higher finish. A season point score of 0 means the driver did not finish in the top 10 for the race.
 
+After cleaning the data, we also includes a new variable called finish, where we can see whether the driver finish their race or not.
+
 *Citation*
 M. Landry. (2021). 'Formula E Championship'. Available at https://www.kaggle.com/datasets/mlandry/formula-e-championship/data. Accessed 18/10/2024.
 
 
 ## Findings
+Methodology:
 
+1) Data Cleaning
+To clean and filter by location, since all race locations have a year at the end of the name, we used the function “str_detect” to detect a certain word in the race location to filter by actual location of races. 
+There were some name inconsistencies, for example, “Ad Diriyah” and “Diriyah” were both used, but after researching, we concluded they were interchangeable names, and we grouped them. A similar problem arose with “Swiss” and “Zurich”, but after doing research into Formula E race locations online, “Swiss” races were held in Bern, so to remain consistent, we turned “Swiss” into “Bern” to differentiate from “Zurich” as all other races were city names rather than countries.
+We also used “retired_time” as a binary variable, to detect whether they finished the race or not.
+We successfully tidied the data, making the table only 5 columns so it’s much easier to work with.
+
+2) Data Visualisation
+
+3) Modelling 
 The write-up of your project and findings go here. 
 
 Think of this as the text of your presentation with some extra detail to cover what there was not time to discuss in the presentation. This might include any assumptions you made when doing your analysis, any limitations of the work you have done or any ideas you have for future work. Feel free to split this section into subsections to make it easier to read. 
