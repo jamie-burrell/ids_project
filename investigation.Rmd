@@ -1,0 +1,274 @@
+---
+title: "IDS investigation worksheet"
+author: "by Table_5_tekkers: Aiman, Joel, Jamie, Hylda, Farhan, Yara"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+**Note:** You can use this file as you 'working document' where you can try out various investigation ideas and keep notes about your findings. How you use and structure this file is up to you. It is recommended that you keep notes about what you are investigating and what you find as this will make the process of creating your presentation and report easier. Please note that you _do not_ need to submit this file as part of your group project.
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-lib, message = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
+library(tidymodels)
+```
+
+
+```{r load-data}
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='latin1')
+```
+
+```{r summary}
+formula_e_race_results %>%
+  filter(season == "1") %>%
+  ggplot( mapping = 
+            aes(x = race_num,
+                y = points,
+                colour = driver
+                )) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ team_group, ncol = 2)
+
+```
+
+``` {r graph relationship}
+formula_e_race_results %>%
+  filter(season != 7, rank_num <= 3) %>%
+ggplot(mapping = 
+         aes(x = race_num,
+             y = rank_num,
+             colour = team_group
+         )) +
+  geom_point() +
+  labs(
+    x = "team",
+    y = "place finished",
+    title = "relationship between team and results") +
+  facet_wrap(~season, ncol = 2) 
+```
+
+``` {r season winners}
+formula_e_race_results %>%
+  filter(season != "7") %>%
+  group_by(season, team_group) %>%
+  summarize(
+    season_points = sum(points)
+  ) %>%
+  arrange(desc(season_points)) %>%
+  filter(season == "6")
+
+
+```
+
+
+``` {r team success graphs}
+formula_e_race_results %>%
+  filter(season != 7) %>%
+  group_by(season, team_group) %>%
+  summarise(final_points = sum(points)) %>%
+  ggplot( mapping = 
+            aes(x = season,
+                y = final_points)) + 
+    geom_point() +
+    facet_wrap(~ team_group, ncol = 2)
+```
+
+
+```{r grid position and final ranking}
+filtered_data <- formula_e_race_results %>%
+  filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
+  filter(grid!="PL")
+  
+filtered_data$grid <- as.numeric(filtered_data$grid) 
+ggplot(filtered_data, mapping = aes(x = grid, y = rank_num)) +
+  geom_jitter() +
+  labs(title = "grid position vs. final rank position",
+       x = "Grid position",
+       y = "Final rank position") +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~driver, scales = "free")
+ 
+```
+
+facet_wrap(~driver, scales = "free")
+
+
+```{r linear regression grid and rank}
+
+filtered_data <- formula_e_race_results %>%
+  filter(driver %in% c("Daniel Abt", "Jérôme d'Ambrosio", "Lucas di Grassi", "Sam Bird")) %>%
+  filter(grid!="PL")
+  
+filtered_data$grid <- as.numeric(filtered_data$grid) 
+
+formula_fit <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(rank_num ~ grid, data = filtered_data)
+
+formula_fit_tidy <- tidy(formula_fit$fit)
+print(formula_fit_tidy) 
+ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "effect of starting grid Position on final rank",
+       x = "grid position",
+       y = "rank number") 
+
+```
+
+
+```{r Linear Model of above graphs} 
+driver_grid_rank_reg <- linear_reg() %>%
+  set_engine("lm") %>%
+  fit(rank_num ~ grid + driver, data = filtered_data)
+
+tidy(driver_grid_rank_reg)
+  
+glance(driver_grid_rank_reg)$adj.r.squared
+```
+
+```{r residuals plot}
+driver_grid_rank_aug <- augment(driver_grid_rank_reg$rank_num)
+
+driver_grid_rank_aug
+```
+
+```{r Top Drivers, Teams Boxplots}
+formula_e_race_results %>%
+  filter(driver %in% c("Jean-Éric Vergne", "Sébastien Buemi", "Lucas di Grassi", "Sam Bird", "António Félix da Costa")) %>%
+  ggplot(mapping = aes(
+    x = driver,
+    y = rank_num,
+    fill = team_group
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver",
+    title = "Top 5 Drivers",
+    fill = "Team"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "left")
+
+
+formula_e_race_results %>%
+  filter(team_group %in% c("Audi", "Techeetah", "Nissan-Renault", "Mahindra", "Virgin")) %>%
+  ggplot(mapping = aes(
+    x = team_group,
+    y = rank_num,
+    fill = team_group
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Team",
+    title = "Top 5 Teams"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+```{r location}
+
+
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    location = case_when(
+      str_detect(race_name, "Beijing") ~ "Beijing",
+      str_detect(race_name, "Punta del Este") ~ "Punta del Este",
+      str_detect(race_name, "Putrajaya") ~ "Putrajaya",
+      str_detect(race_name, "Berlin") ~ "Berlin",
+      str_detect(race_name, "Buenos Aires") ~ "Buenos Aires",
+      str_detect(race_name, "London") ~ "London",
+      str_detect(race_name, "Long Beach") ~ "Long Beach",
+      str_detect(race_name, "Miami") ~ "Miami",
+      str_detect(race_name, "Monaco") ~ "Monaco",
+      str_detect(race_name, "Moscow") ~ "Moscow",
+      str_detect(race_name, "Hong Kong") ~ "Hong Kong",
+      str_detect(race_name, "Marrakesh") ~ "Marrakesh",
+      str_detect(race_name, "Mexico City") ~ "Mexico City",
+      str_detect(race_name, "Paris") ~ "Paris",
+      str_detect(race_name, "Montreal") ~ "Montreal",
+      str_detect(race_name, "New York City") ~ "New York City",
+      str_detect(race_name, "Diriyah") ~ "Diriyah",
+      str_detect(race_name, "Rome") ~ "Rome",
+      str_detect(race_name, "Santiago") ~ "Santiago",
+      str_detect(race_name, "Sanya") ~ "Sanya",
+      str_detect(race_name, "Swiss") ~ "Bern",
+      TRUE ~ "Zurich"
+    )
+  )
+```
+
+``` {r race-completion}
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    finished = case_when(
+      str_detect(time_retired, "W") ~ FALSE,
+      str_detect(time_retired, "U") ~ FALSE,
+      str_detect(time_retired, "T") ~ FALSE,
+      str_detect(time_retired, "A") ~ FALSE,
+      str_detect(time_retired, "S") ~ FALSE,
+      str_detect(time_retired, "R") ~ FALSE,
+      str_detect(time_retired, "w") ~ FALSE,
+      str_detect(time_retired, "P") ~ FALSE,
+      str_detect(time_retired, "M") ~ FALSE,
+      str_detect(time_retired, "O") ~ FALSE,
+      str_detect(time_retired, "H") ~ FALSE,
+      str_detect(time_retired, "G") ~ FALSE,
+      str_detect(time_retired, "F") ~ FALSE,
+      str_detect(time_retired, "E") ~ FALSE,
+      str_detect(time_retired, "D") ~ FALSE,
+      str_detect(time_retired, "C") ~ FALSE,
+      str_detect(time_retired, "B") ~ FALSE,
+      TRUE ~ TRUE
+    )
+  )
+```
+
+
+``` {r cleaning}
+raceresults_cleaned <- formula_e_race_results %>%
+  select(
+    driver, team_group, location, rank_num, finished
+  )
+
+
+```
+
+``` {r DNF proprotions per predictor}
+
+prop_DNF <- function(x){
+  group_by(x) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  )
+}
+ 
+
+  
+  
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    y = proportion_DNF,
+    x = location
+  )) +
+  geom_point()
+  
+```

@@ -15,7 +15,20 @@ This is a template repository for your group project. One of your group members 
 
 (Optional) Use the space below to structure your group project and to distribute tasks amongst members. It is not expected that every member makes a contribution to each component of the investigation, but you should aim to share the work fairly that utilises each other's strengths (eg. coding, analysis, report writing, etc.)
 
-- Data
+- Introduction (Muhammad)
+- Question setting (Jamie)
+- Data cleaning (Jamie)
+- Summary statistics (Joel)
+- Data visualisations (Yara/Joel)
+- Deciding a model
+- Modelling
+- Interpeting/evaluating model
+- Questions
+
+
+
+
+Data
   - [x] Task 1a
   - [ ] Task 1b 
 - Summarise
