@@ -50,7 +50,10 @@ formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 style_xaringan(
   title_slide_background_image = "img/intro picture.jpg",
   title_slide_text_color = "white",
-  background_color = "#1F4257", "#F97B64", "white"
+  background_color = "#2ab6ed", "white", "#c21fd4",
+  text_font_google = google_font("Work Sans", "300", "300i"),
+  code_font_google = google_font("IBM Plex Mono"), 
+  text_font_size = "1.2rem"
 )
 
 ```
@@ -79,6 +82,14 @@ class: inverse, middle, center
 
 # Data wrangling and cleaning 
 
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text after wards (the one on top)
+
+
 ---
 
 # insert subtitle (Joel)
@@ -101,6 +112,112 @@ class: inverse, middle, center
 
 
 ---
+
+# data visualisations (Joel)
+
+- insert text
+--
+
+- insert text (add code)
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text after wards (the one on top)
+
+---
+
+# model selection (Hylda)
+- insert text 
+
+--
+
+- insert text 
+
+---
+# model implementation (Farhan) 
+
+- insert text 
+--
+
+- insert text 
+
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text afterwards (the one on top)
+
+---
+
+# model interpretation (Aiman) (I left that code there but you can delete it)
+
+
+---
+
+# model evaluation including limitaions and possibilities for future study (Jamie)
+
+- can edit font size like this <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
+ 
+--
+
+- insert text 
+
+# summary/ conclusions (Hylda)
+
+- insert text 
+
+--
+
+- insert text 
+
+---
+
+.pull-left[
+- Some text
+- goes here
+]
+.pull-right[
+```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
+# see how I changed out.width and fig.width from defaults
+# to make the figure bigger
+ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
+  geom_boxplot() +
+  theme_minimal()
+```
+]
+---
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text after wards (the one on top)
+
+
+
+
+
+(extra instrctions in the bottom)
+
+If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+
+```{r iris-table, echo = FALSE}
+kable(head(iris), format = "html")
+```
+
+---
+
+# Images
+
+```{r castle, echo = FALSE, out.width = "55%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
+include_graphics("img/edinburgh-castle.jpg")
+```
+
+Or you can also include a full page image. See next slide.
+
 # Layouts
 
 You can use plain text
@@ -120,95 +237,6 @@ or text in two columns $^*$
 ]
 
 ---
-
-# data visualisations (Joel)
-
-- insert text
---
-
-- insert text (add code)
-
----
-
-# model selection (Hylda) the code below is just an example of how to insert code, you can delete that
-
-```{r recode-species, echo = FALSE}
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-iris_modified <- iris %>%
-  mutate(Species = fct_other(Species, keep = "setosa"))
-```
-
-```{r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, color = Species)) +
-  geom_point() + 
-  theme_minimal() # theme options: https://ggplot2.tidyverse.org/reference/ggtheme.html
-```
-
----
-# model implementation (Farhan) 
-
-```{r plot from investigation, echo = FALSE}
-formula_e_race_results %>%
-  filter(season == "1") %>%
-  ggplot( mapping = 
-            aes(x = race_num,
-                y = points,
-                colour = driver
-                )) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~ team_group, ncol = 2)
-
-```
----
-
-# model interpretation (Aiman)
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
-
----
-
-# model evaluation including limitaions and possibilities for future study (Jamie)
-
-- can edit font size like this <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
- 
---
-
-- insert text 
-
-# summary/ conclusions (Hylda)
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
-```
-
----
-
-# Images
-
-```{r castle, echo = FALSE, out.width = "55%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("img/edinburgh-castle.jpg")
-```
-
-Or you can also include a full page image. See next slide.
 
 ---
 
