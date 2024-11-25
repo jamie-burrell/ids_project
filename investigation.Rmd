@@ -292,7 +292,7 @@ raceresults_train <- training(raceresults_split)
 raceresults_test <- testing(raceresults_split)
 
 
-raceresults_rec <- recipe(finished_fct ~ team_group + location, data = raceresults_train) %>%
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
   step_dummy(all_nominal(), -all_outcomes())
 
 raceresults_mod <- logistic_reg() %>%
