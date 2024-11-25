@@ -370,7 +370,7 @@ raceresults_cleaned %>%
   theme(legend.position = "none") +
   labs(
     y = "Track Location",
-    x = "Proportion of DNFs"
+    x = "Observed Probability of DNFs"
   )
 
 raceresults_cleaned %>%
@@ -395,7 +395,7 @@ raceresults_cleaned %>%
   theme(legend.position = "none") +
   labs(
     y = "Track Location",
-    x = "Proportion of DNFs"
+    x = "Observed Probability of DNFs"
   )
 
 raceresults_cleaned %>%
@@ -414,10 +414,87 @@ raceresults_cleaned %>%
   theme(legend.position = "none") +
   labs(
     y = "Track Location",
-    x = "Proportion of DNFs"
+    x = "Observed Probability of DNFs"
   )
 
 ```
 
+```{r tidied team graphs}
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group
+  )) +
+  geom_col() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
 
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group,
+    fill = team_group
+  )) +
+  scale_fill_manual(values = c(
+    "Trulli" = "red"
+  )) +
+  geom_col() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
+  
+```
 
+```{r tidy driver visulaisations}
+
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = driver
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = driver,
+    fill = driver
+  )) +
+  scale_fill_manual(values = c(
+    
+  )) + 
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
