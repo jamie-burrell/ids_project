@@ -31,6 +31,8 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(ggplot2)
+library(gghighlight)
 ```
 
 ```{r setup, include=FALSE}
@@ -140,15 +142,25 @@ delete this text after wards (the one on top)
 
 - insert text 
 --
+```{r, echo=TRUE}
 
-- insert text 
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
 
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
 
-delete this text afterwards (the one on top)
+```
+
+- Set random seed to make results reproducible
+- We used the predictors team group and location to test for finishing outcome (whether they finished the race or not)
+
+---
+
+
+
 
 ---
 

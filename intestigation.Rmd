@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(dplyr)
-
+library(gghighlight)
 library(tidymodels)
 ```
 
@@ -355,9 +355,8 @@ raceresults_cleaned %>%                            #team
 ```
 
 
-```{r possible pointplot}
+```{r tidied location graphs}
 raceresults_cleaned %>%
-<<<<<<< HEAD
   group_by(location) %>%
   summarise(
     proportion_DNF = 1 - mean(finished)
@@ -385,11 +384,11 @@ raceresults_cleaned %>%
     fill = location
   )) +
   scale_fill_manual(values = c(
-    "Sanya" = "purple",
-    "Moscow" = "purple",
-    "Zurich" = "purple",
-    "Miami" = "purple",
-    "Bern" = "purple"
+    "Sanya" = "#c21fd4",
+    "Moscow" = "#c21fd4",
+    "Zurich" = "#c21fd4",
+    "Miami" = "#c21fd4",
+    "Bern" = "#c21fd4"
   )) +
   geom_col() +
   theme_minimal() +
@@ -399,23 +398,17 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNFs"
   )
 
-raceresults_cleaned %>%
+raceresults_cleaned %>% 
   group_by(location) %>%
-=======
-  group_by(driver) %>%
->>>>>>> 915b2fea639d530027af7f302266c04e9f088978
   summarise(
     proportion_DNF = 1 - mean(finished),
-    avg_position = mean(rank_num),
-    count = n(),
-    team_group = team_group
+    count = n()
   ) %>%
+  filter(count > 24) %>%
   ggplot(mapping = aes(
-    y = proportion_DNF,
-    x = avg_position,
-    colour = team_group
+    x = proportion_DNF,
+    y = location
   )) +
-<<<<<<< HEAD
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none") +
@@ -425,9 +418,6 @@ raceresults_cleaned %>%
   )
 
 ```
-=======
-  geom_point() 
->>>>>>> 915b2fea639d530027af7f302266c04e9f088978
 
 ```{r tidied team graphs}
 raceresults_cleaned %>%
@@ -442,6 +432,7 @@ raceresults_cleaned %>%
     y = team_group
   )) +
   geom_col() +
+  theme_minimal() +
   theme(legend.position = "none") +
   labs(
     x = "Observed Probability of DNF",
@@ -461,9 +452,10 @@ raceresults_cleaned %>%
     fill = team_group
   )) +
   scale_fill_manual(values = c(
-    "Trulli" = "red"
+    "Trulli" = "#2ab6ed"
   )) +
   geom_col() +
+  theme_minimal() +
   theme(legend.position = "none") +
   labs(
     x = "Observed Probability of DNF",
@@ -473,38 +465,111 @@ raceresults_cleaned %>%
 ```
 
 ```{r tidy driver visulaisations}
-
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
     proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
     count = n()
   ) %>%
-  filter(count >= 20) %>%
   ggplot(mapping = aes(
     x = proportion_DNF,
-    y = driver
+    y = avg_position
   )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none")
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
 
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
     proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
     count = n()
   ) %>%
-  filter(count >= 20) %>%
   ggplot(mapping = aes(
     x = proportion_DNF,
-    y = driver,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  gghighlight(driver == "Pierre Gasly", label_key = driver)
+
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey")
+
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Tom Dillmann", "Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+
+formula_e_race_results %>%
+  filter(driver %in% c("Tom Dillmann","Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  ggplot(mapping = aes(
+    x = driver,
+    y = rank_num,
     fill = driver
   )) +
-  scale_fill_manual(values = c(
-    
-  )) + 
-  geom_col() +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver"
+  ) +
   theme_minimal() +
   theme(legend.position = "none")
+
 ```
