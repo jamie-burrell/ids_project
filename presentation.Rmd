@@ -56,40 +56,43 @@ style_xaringan(
 ```
 class: center, middle
 
-## A statement of the overall goal / research question
+- <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
 
 ---
 
 class: inverse, center, middle
 
-# Section title
 
 ---
-# Hello World
+# Question setting and process
 
-- Click the `Knit` button to compile your presentation
+- insert text
+--
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- insert text
+
 
 ---
 
 class: inverse, middle, center
 
-# Using xaringan
+# Data wrangling and cleaning 
 
 ---
 
-# xaringan
+# insert subtitle (Joel)
 
-- The presentation is created using the `xaringan` package
+- insert text
+--
 
-- Use `---` to separate slides and `--` for incremental builds
+- insert text (the -- makes the text appear incrementally)
 
 --
 
-- Like this
-
+- insert text 
 ---
+
+# summary statistics (Yara)
 
 # Layouts
 
