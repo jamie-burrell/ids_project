@@ -4,7 +4,11 @@
     <title>IDS Group Project</title>
     <meta charset="utf-8" />
     <meta name="author" content="Table 5 Tekkers   Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi" />
+<<<<<<< HEAD
+    <meta name="date" content="2024-11-22" />
+=======
     <meta name="date" content="2024-11-25" />
+>>>>>>> 0f063bf501dd7f2e299cbf914fa94ae2a9c8dc83
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -25,7 +29,11 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
+<<<<<<< HEAD
+### 2024-11-22
+=======
 ### 2024-11-25
+>>>>>>> 0f063bf501dd7f2e299cbf914fa94ae2a9c8dc83
 ]
 
 ---
@@ -43,104 +51,121 @@ class: center, middle, inverse, title-slide
 
 class: center, middle
 
-## A statement of the overall goal / research question
+- &lt;font size="10"&gt;How is driver performance affected by their team, the track, their age and any other factors?&lt;/font&gt;
 
 ---
 
 class: inverse, center, middle
 
-# Section title
+Why we chose formula e
 
 ---
-# Hello World
+# Question setting and process
 
-- Click the `Knit` button to compile your presentation
+- insert text
+--
 
-- Make sure to commit and push all resulting files to your GitHub repo
+- insert text
+
 
 ---
 
 class: inverse, middle, center
 
-# Using xaringan
+# Data wrangling and cleaning 
+
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text after wards (the one on top)
+
 
 ---
 
-# xaringan
+# insert subtitle (Joel)
 
-- The presentation is created using the `xaringan` package
+- insert text
+--
 
-- Use `---` to separate slides and `--` for incremental builds
+- insert text (the -- makes the text appear incrementally)
 
 --
 
-- Like this
+- insert text 
+
+- can edit the font size like this: 
+---
+
+# Summary statistics (Yara)
+
+- insert text..
+
 
 ---
 
-# Layouts
+# data visualisations (Joel)
 
-You can use plain text
+- insert text
+--
 
-- or bullet points
+- insert text (add code)
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
 
-.pull-left[
-or text in two columns `\(^*\)`
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
+delete this text after wards (the one on top)
 
 ---
 
-# Code
+# model selection (Hylda)
+- insert text 
 
+--
 
-``` r
-# a boring regression
-model &lt;- lm(dist ~ speed, data = cars)
-tidy(model)
-```
+- insert text 
 
-```
-## # A tibble: 2 × 5
-##   term        estimate std.error statistic  p.value
-##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)   -17.6      6.76      -2.60 1.23e- 2
-## 2 speed           3.93     0.416      9.46 1.49e-12
-```
+---
+# model implementation (Farhan) 
 
-``` r
-glance(model)
-```
+- insert text 
+--
 
-```
-## # A tibble: 1 × 12
-##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1     0.651         0.644  15.4      89.6 1.49e-12     1  -207.  419.  425.
-## # ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
-```
+- insert text 
+
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
+
+delete this text afterwards (the one on top)
 
 ---
 
-# Plots
+# model interpretation (Aiman) (I left that code there but you can delete it)
 
-
-
-&lt;img src="presentation_files/figure-html/plot-iris-1.png" width="80%" /&gt;
 
 ---
 
-&lt;img src="presentation_files/figure-html/plot from investigation-1.png" width="80%" /&gt;
----
+# model evaluation including limitaions and possibilities for future study (Jamie)
 
-## Plot and text
+- can edit font size like this &lt;font size="10"&gt;How is driver performance affected by their team, the track, their age and any other factors?&lt;/font&gt;
+ 
+--
+
+- insert text 
+
+# summary/ conclusions (Hylda)
+
+- insert text 
+
+--
+
+- insert text 
+
+---
 
 .pull-left[
 - Some text
@@ -149,10 +174,19 @@ glance(model)
 .pull-right[
 &lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
 ]
-
 ---
+we have to put echo = false  {r plot-iris, echo = FALSE}
+# Code hidden with echo = FALSE
+# Uses modified iris dataset from previous chunk
+# Play around with height and width until you're happy with the look
 
-# Tables
+delete this text after wards (the one on top)
+
+
+
+
+
+(extra instrctions in the bottom)
 
 If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
 
@@ -222,6 +256,26 @@ If you want to generate a table, make sure it is in the HTML format (instead of 
 &lt;/div&gt;
 
 Or you can also include a full page image. See next slide.
+
+# Layouts
+
+You can use plain text
+
+- or bullet points
+
+.pull-left[
+or text in two columns `\(^*\)`
+]
+.pull-right[
+- like
+- this
+]
+
+.footnote[
+[*] And add footnotes
+]
+
+---
 
 ---
 

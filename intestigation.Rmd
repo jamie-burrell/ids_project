@@ -355,8 +355,9 @@ raceresults_cleaned %>%                            #team
 ```
 
 
-```{r tidied location charts}
+```{r possible pointplot}
 raceresults_cleaned %>%
+<<<<<<< HEAD
   group_by(location) %>%
   summarise(
     proportion_DNF = 1 - mean(finished)
@@ -400,15 +401,21 @@ raceresults_cleaned %>%
 
 raceresults_cleaned %>%
   group_by(location) %>%
+=======
+  group_by(driver) %>%
+>>>>>>> 915b2fea639d530027af7f302266c04e9f088978
   summarise(
     proportion_DNF = 1 - mean(finished),
-    count = n()
+    avg_position = mean(rank_num),
+    count = n(),
+    team_group = team_group
   ) %>%
-  filter(count > 24) %>%
   ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location
+    y = proportion_DNF,
+    x = avg_position,
+    colour = team_group
   )) +
+<<<<<<< HEAD
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none") +
@@ -418,6 +425,9 @@ raceresults_cleaned %>%
   )
 
 ```
+=======
+  geom_point() 
+>>>>>>> 915b2fea639d530027af7f302266c04e9f088978
 
 ```{r tidied team graphs}
 raceresults_cleaned %>%
@@ -462,6 +472,7 @@ raceresults_cleaned %>%
   
 ```
 
+<<<<<<< HEAD
 ```{r tidy driver visulaisations}
 
 raceresults_cleaned %>%
@@ -498,3 +509,7 @@ raceresults_cleaned %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
+=======
+
+```
+>>>>>>> 915b2fea639d530027af7f302266c04e9f088978

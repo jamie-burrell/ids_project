@@ -11,18 +11,6 @@ This is a template repository for your group project. One of your group members 
 - `presentation.Rmd` -- Use this file to create your presentation. You will need to download and install the `xaringan` package that contains all of the R and markdown code that you will need to create and compile the presentation slides. For this, run `install.packages("xaringan")` once on your console. Guidance on using the `xaringan` package for creating a presentation in Rmarkdown can be found at [https://bookdown.org/yihui/rmarkdown/xaringan.html](https://bookdown.org/yihui/rmarkdown/xaringan.html).
 - `README.md` -- This document, which outlines the structure of the report. The contents of this file will be rendered on GitHub, and so you can add comments below to keep a track of what  and can be used to keep additional note or task lists.
 
-## Team members
-- Jamie Burrell (s2659884), jamie-burrell
-- Hylda Mohd Azizi s2668393, hyldaazizi
-- Yara Kanaan (s2729303), yarakanaann
-- Aiman Ahmad Sharman (s2726955), MuhammadAiman1406
-- Farhan Khan (s2474382), farhan28k
-- Joel Barron (s2666582), barron-joel
-
-
-
-
-
 ## Task list
 
 (Optional) Use the space below to structure your group project and to distribute tasks amongst members. It is not expected that every member makes a contribution to each component of the investigation, but you should aim to share the work fairly that utilises each other's strengths (eg. coding, analysis, report writing, etc.)
@@ -37,18 +25,32 @@ This is a template repository for your group project. One of your group members 
 - Interpeting/evaluating model
 - Questions
 
-## Planning
-- 20th October - Initial meeting in workshop and data set selection
-- 27th October - Workshop checkin and initial wrangling and exploratory data analysis
-- w/c 28th Oct/4th Nov - Exploratory data analysis, and refining question as we learned about modelling in lectures
-- 11th Nov - Meeting to finish visualisations and start thinking about what models we could use
-- 20th Nov - Meeting to finish data wrangling and cleaning, and conclude exploratory data analysis. Planned what model to use and decided structure of presentation and report
 
 
+
+Data
+  - [x] Task 1a
+  - [ ] Task 1b 
+- Summarise
+  - [ ] Task 2a
+  - [ ] Task 2b
+- Visualisation
+  - [ ] Task 3a
+  - [ ] Task 3b
+- Ect.
+
+# Check-in
+
+There will be two check-in points where you will have a discussion with a tutor on what you have done so far and what you plan to investigate. To help make this meeting run smoothly, it is recommended that you use the space below to bullet point your key findings and your plans. You can also add here any feedback and suggestions you receive from your tutor for you to refer back to in the future.
+
+## Check-in 1 (week 6)
+
+- item 1
+- item 2
+- etc.
 
 ## Check-in 2 (week 10)
 
-- Add team members to ReadMe
-- 
+- item 1
 - item 2
 - etc.
