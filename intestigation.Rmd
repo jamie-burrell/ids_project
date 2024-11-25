@@ -355,9 +355,8 @@ raceresults_cleaned %>%                            #team
 ```
 
 
-```{r possible pointplot}
+```{r tidied location graphs}
 raceresults_cleaned %>%
-<<<<<<< HEAD
   group_by(location) %>%
   summarise(
     proportion_DNF = 1 - mean(finished)
@@ -399,23 +398,17 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNFs"
   )
 
-raceresults_cleaned %>%
+raceresults_cleaned %>% 
   group_by(location) %>%
-=======
-  group_by(driver) %>%
->>>>>>> 915b2fea639d530027af7f302266c04e9f088978
   summarise(
     proportion_DNF = 1 - mean(finished),
-    avg_position = mean(rank_num),
-    count = n(),
-    team_group = team_group
+    count = n()
   ) %>%
+  filter(count > 24) %>%
   ggplot(mapping = aes(
-    y = proportion_DNF,
-    x = avg_position,
-    colour = team_group
+    x = proportion_DNF,
+    y = location
   )) +
-<<<<<<< HEAD
   geom_col() +
   theme_minimal() +
   theme(legend.position = "none") +
@@ -425,9 +418,6 @@ raceresults_cleaned %>%
   )
 
 ```
-=======
-  geom_point() 
->>>>>>> 915b2fea639d530027af7f302266c04e9f088978
 
 ```{r tidied team graphs}
 raceresults_cleaned %>%
