@@ -355,69 +355,23 @@ raceresults_cleaned %>%                            #team
 ```
 
 
-```{r tidied location charts}
+```{r possible pointplot}
 raceresults_cleaned %>%
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished)
-  ) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Proportion of DNFs"
-  )
-
-raceresults_cleaned %>%
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished)
-  ) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location,
-    fill = location
-  )) +
-  scale_fill_manual(values = c(
-    "Sanya" = "purple",
-    "Moscow" = "purple",
-    "Zurich" = "purple",
-    "Miami" = "purple",
-    "Bern" = "purple"
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Proportion of DNFs"
-  )
-
-raceresults_cleaned %>%
-  group_by(location) %>%
+  group_by(driver) %>%
   summarise(
     proportion_DNF = 1 - mean(finished),
-    count = n()
+    avg_position = mean(rank_num),
+    count = n(),
+    team_group = team_group
   ) %>%
-  filter(count > 24) %>%
   ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location
+    y = proportion_DNF,
+    x = avg_position,
+    colour = team_group
   )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Proportion of DNFs"
-  )
+  geom_point() 
+
+
+
 
 ```
-
-
-
