@@ -24,7 +24,7 @@ library(tidymodels)
 
 
 ```{r load-data}
-formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='latin1')
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='UTF-8')
 ```
 
 ```{r summary}
@@ -472,7 +472,6 @@ raceresults_cleaned %>%
   
 ```
 
-<<<<<<< HEAD
 ```{r tidy driver visulaisations}
 
 raceresults_cleaned %>%
@@ -509,7 +508,3 @@ raceresults_cleaned %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
-=======
-
-```
->>>>>>> 915b2fea639d530027af7f302266c04e9f088978
