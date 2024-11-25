@@ -62,6 +62,7 @@ class: center, middle
 
 class: inverse, center, middle
 
+Why we chose formula e
 
 ---
 # Question setting and process
@@ -90,10 +91,16 @@ class: inverse, middle, center
 --
 
 - insert text 
+
+- can edit the font size like this: 
 ---
 
-# summary statistics (Yara)
+# Summary statistics (Yara)
 
+- insert text..
+
+
+---
 # Layouts
 
 You can use plain text
@@ -114,18 +121,16 @@ or text in two columns $^*$
 
 ---
 
-# Code
+# data visualisations (Joel)
 
-```{r boring-regression}
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
-```
+- insert text
+--
+
+- insert text (add code)
 
 ---
 
-# Plots
+# model selection (Hylda) the code below is just an example of how to insert code, you can delete that
 
 ```{r recode-species, echo = FALSE}
 # In this chunk I'm doing a bunch of analysis that I don't want to present 
@@ -144,6 +149,7 @@ ggplot(data = iris_modified, mapping = aes(x = Sepal.Width, y = Sepal.Length, co
 ```
 
 ---
+# model implementation (Farhan) 
 
 ```{r plot from investigation, echo = FALSE}
 formula_e_race_results %>%
@@ -160,7 +166,7 @@ formula_e_race_results %>%
 ```
 ---
 
-## Plot and text
+# model interpretation (Aiman)
 
 .pull-left[
 - Some text
@@ -178,7 +184,15 @@ ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
 
 ---
 
-# Tables
+# model evaluation including limitaions and possibilities for future study (Jamie)
+
+- can edit font size like this <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
+ 
+--
+
+- insert text 
+
+# summary/ conclusions (Hylda)
 
 If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
 
