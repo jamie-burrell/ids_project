@@ -31,6 +31,8 @@ library(tidymodels)
 library(palmerpenguins)
 library(knitr)
 library(xaringanthemer)
+library(ggplot2)
+library(gghighlight)
 ```
 
 ```{r setup, include=FALSE}

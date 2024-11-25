@@ -516,7 +516,8 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  ) 
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey")
 
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -531,11 +532,11 @@ raceresults_cleaned %>%
     y = avg_position
   )) +
   geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  ) +
-  geom_smooth(method = "lm", se = FALSE)
+  )
 
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -550,16 +551,14 @@ raceresults_cleaned %>%
     y = avg_position
   )) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
+  gghighlight(driver %in% c("Tom Dillmann", "Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  ) +
-  gghighlight(driver %in% c("Jean-Éric Vergne", "Sébastien Buemi", "Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver)
-
+  )
 
 formula_e_race_results %>%
-  filter(driver %in% c("Jean-Éric Vergne", "Sébastien Buemi", "Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  filter(driver %in% c("Tom Dillmann","Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther")) %>%
   ggplot(mapping = aes(
     x = driver,
     y = rank_num,
@@ -572,4 +571,5 @@ formula_e_race_results %>%
   ) +
   theme_minimal() +
   theme(legend.position = "none")
+
 ```
