@@ -557,7 +557,8 @@ raceresults_cleaned %>%
     y = "Average Finishing Posiiton"
   )
 
-formula_e_race_results %>%
+  
+raceresults_cleaned %>%
   filter(driver %in% c("Tom Dillmann","Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther")) %>%
   ggplot(mapping = aes(
     x = driver,
@@ -571,5 +572,7 @@ formula_e_race_results %>%
   ) +
   theme_minimal() +
   theme(legend.position = "none")
+
+
 
 ```
