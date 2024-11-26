@@ -24,7 +24,7 @@ library(tidymodels)
 
 
 ```{r load-data}
-formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='latin1')
+formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='UTF-8')
 ```
 
 ```{r summary}
@@ -320,6 +320,19 @@ raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>
   bind_cols(raceresults_test)
 raceresults_pred
 
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "second"
+  ) %>%
+  autoplot()
 
+raceresults_pred %>%
+  roc_auc(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "second"
+  )
 
 ```
