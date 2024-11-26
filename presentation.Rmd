@@ -138,7 +138,7 @@ delete this text after wards (the one on top)
 ---
 # model implementation (Farhan) 
 
-- insert text 
+- Model Implementation
 --
 ```{r, echo=TRUE}
 
