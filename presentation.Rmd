@@ -46,6 +46,65 @@ formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
 
 ```
 
+```{r cleaning data, include=FALSE}
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    location = case_when(
+      str_detect(race_name, "Beijing") ~ "Beijing",
+      str_detect(race_name, "Punta del Este") ~ "Punta del Este",
+      str_detect(race_name, "Putrajaya") ~ "Putrajaya",
+      str_detect(race_name, "Berlin") ~ "Berlin",
+      str_detect(race_name, "Buenos Aires") ~ "Buenos Aires",
+      str_detect(race_name, "London") ~ "London",
+      str_detect(race_name, "Long Beach") ~ "Long Beach",
+      str_detect(race_name, "Miami") ~ "Miami",
+      str_detect(race_name, "Monaco") ~ "Monaco",
+      str_detect(race_name, "Moscow") ~ "Moscow",
+      str_detect(race_name, "Hong Kong") ~ "Hong Kong",
+      str_detect(race_name, "Marrakesh") ~ "Marrakesh",
+      str_detect(race_name, "Mexico City") ~ "Mexico City",
+      str_detect(race_name, "Paris") ~ "Paris",
+      str_detect(race_name, "Montreal") ~ "Montreal",
+      str_detect(race_name, "New York City") ~ "New York City",
+      str_detect(race_name, "Diriyah") ~ "Diriyah",
+      str_detect(race_name, "Rome") ~ "Rome",
+      str_detect(race_name, "Santiago") ~ "Santiago",
+      str_detect(race_name, "Sanya") ~ "Sanya",
+      str_detect(race_name, "Swiss") ~ "Bern",
+      TRUE ~ "Zurich"
+    )
+  )
+
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    finished = case_when(
+      str_detect(time_retired, "W") ~ FALSE,
+      str_detect(time_retired, "U") ~ FALSE,
+      str_detect(time_retired, "T") ~ FALSE,
+      str_detect(time_retired, "A") ~ FALSE,
+      str_detect(time_retired, "S") ~ FALSE,
+      str_detect(time_retired, "R") ~ FALSE,
+      str_detect(time_retired, "w") ~ FALSE,
+      str_detect(time_retired, "P") ~ FALSE,
+      str_detect(time_retired, "M") ~ FALSE,
+      str_detect(time_retired, "O") ~ FALSE,
+      str_detect(time_retired, "H") ~ FALSE,
+      str_detect(time_retired, "G") ~ FALSE,
+      str_detect(time_retired, "F") ~ FALSE,
+      str_detect(time_retired, "E") ~ FALSE,
+      str_detect(time_retired, "D") ~ FALSE,
+      str_detect(time_retired, "C") ~ FALSE,
+      str_detect(time_retired, "B") ~ FALSE,
+      TRUE ~ TRUE
+    )
+  )
+
+raceresults_cleaned <- formula_e_race_results %>%
+  select(
+    driver, team_group, location, rank_num, finished
+  )
+```
+
 ```{r include=FALSE}
 
 #Background image
@@ -129,7 +188,74 @@ we have to put echo = false  {r plot-iris, echo = FALSE}
 delete this text after wards (the one on top)
 
 ---
+```{r location graphs 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
+```
+---
+```{r location graphs 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location,
+    fill = location
+  )) +
+  scale_fill_manual(values = c(
+    "Sanya" = "#c21fd4",
+    "Moscow" = "#c21fd4",
+    "Zurich" = "#c21fd4",
+    "Miami" = "#c21fd4",
+    "Bern" = "#c21fd4"
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
+```
+---
+```{r location graphs 3, echo=FALSE}
+raceresults_cleaned %>% 
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count > 24) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
 
+```
+---
 # model selection (Hylda)
 - insert text 
 
@@ -144,13 +270,6 @@ delete this text after wards (the one on top)
 --
 ```{r, echo=TRUE}
 
-set.seed(28)
-raceresults_split <- initial_split(raceresults_factored)
-raceresults_train <- training(raceresults_split)
-raceresults_test <- testing(raceresults_split)
-
-raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
-  step_dummy(all_nominal(), -all_outcomes())
 
 ```
 
