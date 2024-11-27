@@ -144,12 +144,6 @@ class: center, middle
 - <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
 
 ---
-
-class: inverse, center, middle
-
-Why we chose formula e
-
----
 # Question setting and process
 
 - insert text
@@ -159,8 +153,6 @@ Why we chose formula e
 
 
 ---
-
-class: inverse, middle, center
 
 # Dataset 
 
