@@ -140,7 +140,7 @@ delete this text after wards (the one on top)
 ---
 # model implementation (Farhan) 
 
-- Model Implementation
+- Model Implementation (Splitting the data & creating the recipe)
 --
 ```{r, echo=TRUE}
 
@@ -159,11 +159,34 @@ raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = 
 
 ---
 
+Model Implementation (Workflow)
+--
+```{r, echo=TRUE}
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+```
 
-
+-Created workflow to effectively combine steps in order to train data easily
 
 ---
 
+Model Implementation (Training the data)
+--
+```{r, echo=TRUE}
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+-Used the training data to allow model to learn what the most influential predictors are
+-Creates a reliable model which is now trained to make predictions based on the variables it's fed
+
+---
 # model interpretation (Aiman) (I left that code there but you can delete it)
 
 
