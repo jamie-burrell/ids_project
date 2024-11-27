@@ -188,6 +188,8 @@ we have to put echo = false  {r plot-iris, echo = FALSE}
 delete this text after wards (the one on top)
 
 ---
+# Exploring Drivers
+--
 ```{r driver graph 1, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -207,6 +209,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring Drivers
 ```{r driver graph 2, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -227,6 +230,7 @@ raceresults_cleaned %>%
   gghighlight(driver == "Pierre Gasly", label_key = driver)
 ```
 ---
+# Exploring Drivers
 ```{r driver graph 3, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -248,6 +252,7 @@ raceresults_cleaned %>%
   geom_smooth(method = "lm", se = FALSE, colour = "grey")
 ```
 ---
+# Exploring Drivers
 ```{r driver graph 4, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -269,6 +274,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring Drivers
 ```{r driver graph 5, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
@@ -290,6 +296,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring Drivers
 ```{r driver graph 6, echo=FALSE}
 boxplot_data <- raceresults_cleaned %>%
   filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
@@ -315,6 +322,8 @@ boxplot_data %>%
   theme(legend.position = "none")
 ```
 ---
+# Exploring Track Locations
+--
 ```{r location graphs 1, echo=FALSE}
 raceresults_cleaned %>%
   group_by(location) %>%
@@ -334,6 +343,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring Track Locations
 ```{r location graphs 2, echo=FALSE}
 raceresults_cleaned %>%
   group_by(location) %>%
@@ -361,6 +371,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring Locations
 ```{r location graphs 3, echo=FALSE}
 raceresults_cleaned %>% 
   group_by(location) %>%
@@ -383,6 +394,8 @@ raceresults_cleaned %>%
 
 ```
 ---
+# Exploring the effect of Teams
+--
 ```{r team graph 1, echo=FALSE}
 raceresults_cleaned %>%
   group_by(team_group) %>%
@@ -404,6 +417,7 @@ raceresults_cleaned %>%
   )
 ```
 ---
+# Exploring the effect of Teams
 ```{r team graph 2, echo=FALSE}
 raceresults_cleaned %>%
   group_by(team_group) %>%
