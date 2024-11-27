@@ -43,8 +43,8 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```{r load-data, include=FALSE}
 # Load your data here
 formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
-
 ```
+
 
 ```{r cleaning data, include=FALSE}
 formula_e_race_results <- formula_e_race_results %>%
@@ -103,6 +103,27 @@ raceresults_cleaned <- formula_e_race_results %>%
   select(
     driver, team_group, location, rank_num, finished
   )
+
+raceresults_factored <- raceresults_cleaned %>%
+  mutate(
+    finished_fct = case_when(
+      finished == TRUE ~ "TRUE",
+      finished == FALSE ~ "FALSE"
+    ),
+  finished_fct = fct_relevel(finished_fct, "TRUE", "FALSE"))
+
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(driver) %>%
+  filter(n() >= 20) %>%
+  ungroup()
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(location) %>%
+  filter(n() > 24) %>%
+  ungroup()
+
+
 ```
 
 ```{r include=FALSE}
@@ -141,14 +162,31 @@ Why we chose formula e
 
 class: inverse, middle, center
 
-# Data wrangling and cleaning 
+# Dataset 
 
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
+- Our data set has 19 variables and 1480 observations
+``` {r glimpse dataset, echo = FALSE}
+glimpse(formula_e_race_results)
+```
+---
+# Data cleaning
 
-delete this text after wards (the one on top)
+- Created new binary outcome variable _finished_ and converted this to a factor
+
+--
+
+- Created new categorical predictor variable _location_ (Challenges included inconsistencies in race names, and accents)
+--
+
+- New data set with 5 variables - 2 outcomes and 3 predictors
+``` {r glimpse new dataset, echo = FALSE}
+glimpse(raceresults_factored)
+```
+
+---
+
+
+
 
 
 ---
@@ -475,13 +513,83 @@ raceresults_cleaned %>%
 
 ---
 
-# model evaluation including limitaions and possibilities for future study (Jamie)
+# Evaluating our model - 3 variables
+``` {r model with 3, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
 
-- can edit font size like this <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
- 
---
 
-- insert text 
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+```{r roc 3, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
+
+---
+
+# Evaluating our model - 1 variable
+``` {r model with location, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
+
+
+raceresults_rec <- recipe(finished_fct ~ location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+``` {r roc location, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
+
+--- 
 
 # summary/ conclusions (Hylda)
 
