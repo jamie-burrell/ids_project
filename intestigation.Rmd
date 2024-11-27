@@ -5,14 +5,11 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-**Note:** You can use this file as you 'working document' where you can try out various investigation ideas and keep notes about your findings. How you use and structure this file is up to you. It is recommended that you keep notes about what you are investigating and what you find as this will make the process of creating your presentation and report easier. Please note that you _do not_ need to submit this file as part of your group project.
-
-
+**Note:** You can use this file as you 'working document' where you can try out various investigation ideas and keep notes about your findings. How you use and structure this file is up to you. It is recommended that you keep notes about what you are investigating and what you find as this will make the process of creating your presentation and report easier. Please note that you *do not* need to submit this file as part of your group project.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-
 
 ```{r load-lib, message = FALSE}
 library(tidyverse)
@@ -21,7 +18,6 @@ library(dplyr)
 library(gghighlight)
 library(tidymodels)
 ```
-
 
 ```{r load-data}
 formula_e_race_results <- read.csv("data/formula_e_race_results.csv", encoding='UTF-8')
@@ -41,7 +37,7 @@ formula_e_race_results %>%
 
 ```
 
-``` {r graph relationship}
+```{r graph relationship}
 formula_e_race_results %>%
   filter(season != 7, rank_num <= 3) %>%
 ggplot(mapping = 
@@ -57,7 +53,7 @@ ggplot(mapping =
   facet_wrap(~season, ncol = 2) 
 ```
 
-``` {r season winners}
+```{r season winners}
 formula_e_race_results %>%
   filter(season != "7") %>%
   group_by(season, team_group) %>%
@@ -70,8 +66,7 @@ formula_e_race_results %>%
 
 ```
 
-
-``` {r team success graphs}
+```{r team success graphs}
 formula_e_race_results %>%
   filter(season != 7) %>%
   group_by(season, team_group) %>%
@@ -82,7 +77,6 @@ formula_e_race_results %>%
     geom_point() +
     facet_wrap(~ team_group, ncol = 2)
 ```
-
 
 ```{r grid position and final ranking}
 filtered_data <- formula_e_race_results %>%
@@ -100,8 +94,7 @@ ggplot(filtered_data, mapping = aes(x = grid, y = rank_num)) +
  
 ```
 
-facet_wrap(~driver, scales = "free")
-
+facet_wrap(\~driver, scales = "free")
 
 ```{r linear regression grid and rank}
 
@@ -126,8 +119,7 @@ ggplot(data = filtered_data, aes(x = grid, y = rank_num, color = driver)) +
 
 ```
 
-
-```{r Linear Model of above graphs} 
+```{r Linear Model of above graphs}
 driver_grid_rank_reg <- linear_reg() %>%
   set_engine("lm") %>%
   fit(rank_num ~ grid + driver, data = filtered_data)
@@ -212,7 +204,7 @@ formula_e_race_results <- formula_e_race_results %>%
   )
 ```
 
-``` {r race-completion}
+```{r race-completion}
 formula_e_race_results <- formula_e_race_results %>%
   mutate(
     finished = case_when(
@@ -238,8 +230,7 @@ formula_e_race_results <- formula_e_race_results %>%
   )
 ```
 
-
-``` {r cleaning}
+```{r cleaning}
 raceresults_cleaned <- formula_e_race_results %>%
   select(
     driver, team_group, location, rank_num, finished
@@ -248,7 +239,7 @@ raceresults_cleaned <- formula_e_race_results %>%
 
 ```
 
-``` {r DNF proprotions per predictor}
+```{r DNF proprotions per predictor}
 
 raceresults_cleaned %>%                          #bar charts of location v proportion of DNF
   group_by(location) %>%
@@ -353,7 +344,6 @@ raceresults_cleaned %>%                            #team
   )
   
 ```
-
 
 ```{r tidied location graphs}
 raceresults_cleaned %>%
@@ -551,16 +541,24 @@ raceresults_cleaned %>%
     y = avg_position
   )) +
   geom_point() +
-  gghighlight(driver %in% c("Tom Dillmann", "Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
+  gghighlight(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
   )
 
-formula_e_race_results %>%
-  filter(driver %in% c("Tom Dillmann","Lucas di Grassi", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+boxplot_data <- raceresults_cleaned %>%
+  filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  mutate(order = case_when(
+    driver == "Tom Dillmann" ~ 3,
+    driver == "Daniel Abt" ~ 2,
+    driver == "Stéphane Sarrazin" ~ 1,
+    driver == "Maximilian Günther" ~ 4
+  ))
+
+boxplot_data %>%
   ggplot(mapping = aes(
-    x = driver,
+    x = reorder(driver, order),
     y = rank_num,
     fill = driver
   )) +
