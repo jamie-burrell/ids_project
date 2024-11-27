@@ -188,6 +188,133 @@ we have to put echo = false  {r plot-iris, echo = FALSE}
 delete this text after wards (the one on top)
 
 ---
+```{r driver graph 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+```{r driver graph 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  gghighlight(driver == "Pierre Gasly", label_key = driver)
+```
+---
+```{r driver graph 3, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey")
+```
+---
+```{r driver graph 4, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+```{r driver graph 5, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+```{r driver graph 6, echo=FALSE}
+boxplot_data <- raceresults_cleaned %>%
+  filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  mutate(order = case_when(
+    driver == "Tom Dillmann" ~ 3,
+    driver == "Daniel Abt" ~ 2,
+    driver == "Stéphane Sarrazin" ~ 1,
+    driver == "Maximilian Günther" ~ 4
+  ))
+
+boxplot_data %>%
+  ggplot(mapping = aes(
+    x = reorder(driver, order),
+    y = rank_num,
+    fill = driver
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+---
 ```{r location graphs 1, echo=FALSE}
 raceresults_cleaned %>%
   group_by(location) %>%
@@ -254,6 +381,52 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNFs"
   )
 
+```
+---
+```{r team graph 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
+```
+---
+```{r team graph 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group,
+    fill = team_group
+  )) +
+  scale_fill_manual(values = c(
+    "Trulli" = "#2ab6ed"
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
 ```
 ---
 # model selection (Hylda)
