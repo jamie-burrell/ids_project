@@ -491,8 +491,19 @@ raceresults_cleaned %>%
 - Model Implementation (Splitting the data & creating the recipe)
 --
 ```{r, echo=TRUE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
 
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
 
+```
+
+```{r, echo=FALSE}
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
 ```
 
 - Set random seed to make results reproducible
@@ -511,9 +522,6 @@ raceresults_wflow <- workflow() %>%
 -Created workflow to effectively combine steps in order to train data easily
 
 ---
-# Model Interpretation
-
-<<<<<<< HEAD
 Model Implementation (Training the data)
 --
 ```{r, echo=TRUE}
@@ -531,13 +539,12 @@ raceresults_pred
 
 ---
 # model interpretation (Aiman) (I left that code there but you can delete it)
-=======
+
 1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
 --
 
 
 2. This tools shows whether the predictors have a significant effect on the race result or not.
->>>>>>> 3ecd9347bc6e3794523666b632d9871042794b07
 
 
 ---

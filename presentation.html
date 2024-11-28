@@ -4,7 +4,7 @@
     <title>IDS Group Project</title>
     <meta charset="utf-8" />
     <meta name="author" content="Table 5 Tekkers   Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi" />
-    <meta name="date" content="2024-11-27" />
+    <meta name="date" content="2024-11-28" />
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
-### 2024-11-27
+### 2024-11-28
 ]
 
 ---
@@ -208,8 +208,19 @@ delete this text after wards (the one on top)
 ---
 # model implementation (Farhan) 
 
-- insert text 
+- Model Implementation (Splitting the data &amp; creating the recipe)
 --
+
+``` r
+set.seed(28)
+raceresults_split &lt;- initial_split(raceresults_factored)
+raceresults_train &lt;- training(raceresults_split)
+raceresults_test &lt;- testing(raceresults_split)
+
+raceresults_rec &lt;- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %&gt;%
+  step_dummy(all_nominal(), -all_outcomes())
+```
+
 
 
 - Set random seed to make results reproducible
@@ -217,11 +228,73 @@ delete this text after wards (the one on top)
 
 ---
 
+Model Implementation (Workflow)
+--
 
+``` r
+raceresults_wflow &lt;- workflow() %&gt;%
+  add_recipe(raceresults_rec) %&gt;%
+  add_model(raceresults_mod)
+```
 
+-Created workflow to effectively combine steps in order to train data easily
 
 ---
-# Model Interpretation
+Model Implementation (Training the data)
+--
+
+``` r
+raceresults_fit &lt;- raceresults_wflow %&gt;%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+```
+
+```
+## # A tibble: 55 × 5
+##    term                          estimate std.error statistic p.value
+##    &lt;chr&gt;                            &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 (Intercept)                     0.198      1.69      0.117   0.907
+##  2 driver_Alexander.Sims           0.424      1.01      0.418   0.676
+##  3 driver_André.Lotterer          -0.766      1.12     -0.687   0.492
+##  4 driver_António.Félix.da.Costa   0.0904     0.887     0.102   0.919
+##  5 driver_Bruno.Senna             -1.62       1.08     -1.51    0.132
+##  6 driver_Daniel.Abt              -0.490      1.59     -0.309   0.758
+##  7 driver_Edoardo.Mortara         -0.468      1.14     -0.412   0.680
+##  8 driver_Felipe.Massa            -1.06       1.23     -0.866   0.387
+##  9 driver_Felix.Rosenqvist        -1.28       0.954    -1.34    0.180
+## 10 driver_Jean.Éric.Vergne        -0.996      0.896    -1.11    0.266
+## # ℹ 45 more rows
+```
+
+``` r
+raceresults_pred &lt;- predict(raceresults_fit, raceresults_test, type = "prob") %&gt;%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+```
+## # A tibble: 280 × 8
+##    .pred_TRUE .pred_FALSE driver           team_group location rank_num finished
+##         &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;      &lt;chr&gt;       &lt;int&gt; &lt;lgl&gt;   
+##  1      0.856      0.144  Lucas di Grassi  Audi       Putraja…        1 TRUE    
+##  2      0.659      0.341  Maximilian Günt… BMW-Andre… Berlin          1 TRUE    
+##  3      0.819      0.181  Daniel Abt       Audi       Mexico …        1 TRUE    
+##  4      0.942      0.0578 Lucas di Grassi  Audi       Berlin          1 TRUE    
+##  5      0.738      0.262  Lucas di Grassi  Audi       Beijing         1 TRUE    
+##  6      0.940      0.0604 Lucas di Grassi  Audi       Long Be…        1 TRUE    
+##  7      0.875      0.125  Felix Rosenqvist Mahindra   Hong Ko…        1 TRUE    
+##  8      0.893      0.107  Stoffel Vandoor… Mercedes   Berlin          1 TRUE    
+##  9      0.715      0.285  Sébastien Buemi  Nissan-Re… Beijing         1 TRUE    
+## 10      0.841      0.159  Jean-Éric Vergne Techeetah  Punta d…        1 TRUE    
+## # ℹ 270 more rows
+## # ℹ 1 more variable: finished_fct &lt;fct&gt;
+```
+
+-Used the training data to allow model to learn what the most influential predictors are
+-Creates a reliable model which is now trained to make predictions based on the variables it's fed
+
+---
+# model interpretation (Aiman) (I left that code there but you can delete it)
 
 1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
 --
@@ -261,7 +334,7 @@ delete this text after wards (the one on top)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-6-1.png" width="100%" /&gt;
 ]
 ---
 we have to put echo = false  {r plot-iris, echo = FALSE}
