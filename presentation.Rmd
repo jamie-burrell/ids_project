@@ -310,7 +310,29 @@ raceresults_cleaned %>%
 ```
 ---
 # Exploring Drivers
-```{r driver graph 5, echo=FALSE}
+```{r best_drivers_plot, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) 
+```
+---
+# Exploring Drivers
+```{r comparing_drivers, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
