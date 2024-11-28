@@ -565,12 +565,18 @@ raceresults_pred
 ---
 # Model Interpretation
 
-1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
---
+- We used estimation coefficient to interpret the multiple predictors (driver, team group and location)
 
-2. This tools shows whether the predictors have a significant effect on the race result or not.
+- Positive estimation indicates the predictor increases the probability of the driver not finishing the race (DNF) and vice versa
 
+```{r, echo=FALSE}
 
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)%>%
+  slice(11:20)
+
+```
 ---
 
 # Evaluating Our Model

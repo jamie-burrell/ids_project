@@ -389,12 +389,26 @@ raceresults_pred
 ---
 # Model Interpretation
 
-1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
---
+- We used estimation coefficient to interpret the multiple predictors (driver, team group and location)
 
-2. This tools shows whether the predictors have a significant effect on the race result or not.
+- Positive estimation indicates the predictor increases the probability of the driver not finishing the race (DNF) and vice versa
 
 
+```
+## # A tibble: 10 × 5
+##    term                      estimate std.error statistic p.value
+##    &lt;chr&gt;                        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+##  1 driver_Jérôme.d.Ambrosio    -0.538     0.773   -0.696   0.486 
+##  2 driver_José.María.López      0.737     0.762    0.966   0.334 
+##  3 driver_Loïc.Duval            1.29      0.918    1.40    0.161 
+##  4 driver_Lucas.di.Grassi      -1.24      1.69    -0.730   0.465 
+##  5 driver_Maro.Engel           -0.218     1.16    -0.187   0.851 
+##  6 driver_Maximilian.Günther    1.68      0.901    1.87    0.0618
+##  7 driver_Mitch.Evans          -2.47      0.980   -2.52    0.0117
+##  8 driver_Nelson.Piquet.Jr.    -1.66      1.00    -1.65    0.0982
+##  9 driver_Nick.Heidfeld        -0.778     0.840   -0.926   0.354 
+## 10 driver_Nico.Prost          -12.9     535.      -0.0240  0.981
+```
 ---
 
 # Evaluating Our Model
@@ -407,7 +421,7 @@ raceresults_pred
 
 
 
-&lt;img src="presentation_files/figure-html/unnamed-chunk-13-1.png" width="60%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-14-1.png" width="60%" /&gt;
 ]
 
 .panel[.panel-name[1 Variable]
@@ -416,7 +430,7 @@ raceresults_pred
 
 
 
-&lt;img src="presentation_files/figure-html/unnamed-chunk-14-1.png" width="60%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-15-1.png" width="60%" /&gt;
 ]] 
 
 ---
