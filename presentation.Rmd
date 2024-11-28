@@ -354,7 +354,7 @@ raceresults_cleaned %>%
 ```
 ---
 # Exploring Drivers
-```{r driver_boxplot, echo=FALSE}
+```{r driver_boxplot, echo=FALSE, fig.show='hide', warning=FALSE}
 boxplot_data <- raceresults_cleaned %>%
   filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
   mutate(order = case_when(
@@ -377,6 +377,8 @@ boxplot_data %>%
   ) +
   theme_minimal() +
   theme(legend.position = "none")
+```
+```{r ref.label = "driver_boxplot", echo = FALSE, warning = FALSE, out.width=60%}
 ```
 
 ---
