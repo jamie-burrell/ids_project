@@ -279,9 +279,7 @@ class: center, middle
  
 
 ---
-# Model Implementation
-
-## Splitting the data &amp; creating the recipe
+# Model Implementation (Splitting the data &amp; creating the recipe)
 --
 
 ``` r
@@ -339,6 +337,9 @@ tidy(raceresults_fit)
 ## # ℹ 45 more rows
 ```
 
+-Used the training data to allow model to learn what the most influential predictors are
+---
+
 ``` r
 raceresults_pred &lt;- predict(raceresults_fit, raceresults_test, type = "prob") %&gt;%
   bind_cols(raceresults_test)
@@ -363,7 +364,6 @@ raceresults_pred
 ## # ℹ 1 more variable: finished_fct &lt;fct&gt;
 ```
 
--Used the training data to allow model to learn what the most influential predictors are
 -Creates a reliable model which is now trained to make predictions based on the variables it's fed
 
 ---

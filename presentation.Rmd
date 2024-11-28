@@ -518,9 +518,7 @@ raceresults_cleaned %>%
  
 
 ---
-# Model Implementation
-
-## Splitting the data & creating the recipe
+# Model Implementation (Splitting the data & creating the recipe)
 --
 ```{r, echo=TRUE}
 set.seed(28)
@@ -560,13 +558,16 @@ raceresults_wflow <- workflow() %>%
 raceresults_fit <- raceresults_wflow %>%
   fit(data = raceresults_train)
 tidy(raceresults_fit)
+```
 
+-Used the training data to allow model to learn what the most influential predictors are
+---
+```{r, echo=TRUE}
 raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
   bind_cols(raceresults_test)
 raceresults_pred
 ```
 
--Used the training data to allow model to learn what the most influential predictors are
 -Creates a reliable model which is now trained to make predictions based on the variables it's fed
 
 ---
