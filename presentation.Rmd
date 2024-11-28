@@ -537,7 +537,7 @@ raceresults_mod <- logistic_reg() %>%
 ```
 
 - Set random seed to make results reproducible
-- We used the predictors team group and location to test for finishing outcome (whether they finished the race or not)
+- We used the predictors driver, team group and location to test for finishing outcome (whether they finished the race or not)
 
 ---
 
