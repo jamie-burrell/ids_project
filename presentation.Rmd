@@ -669,9 +669,10 @@ raceresults_pred %>%
 
 ---
 
-class: inverse, centre, middle
+class: centre, middle
 
 # Thank you
--- 
 
-##Any Questions?
+--
+
+## Any Questions?
