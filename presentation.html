@@ -4,11 +4,7 @@
     <title>IDS Group Project</title>
     <meta charset="utf-8" />
     <meta name="author" content="Table 5 Tekkers   Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi" />
-<<<<<<< HEAD
-    <meta name="date" content="2024-11-22" />
-=======
-    <meta name="date" content="2024-11-25" />
->>>>>>> 0f063bf501dd7f2e299cbf914fa94ae2a9c8dc83
+    <meta name="date" content="2024-11-27" />
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -29,14 +25,13 @@ class: center, middle, inverse, title-slide
 ### University of Edinburgh
 ]
 .date[
-<<<<<<< HEAD
-### 2024-11-22
-=======
-### 2024-11-25
->>>>>>> 0f063bf501dd7f2e299cbf914fa94ae2a9c8dc83
+### 2024-11-27
 ]
 
 ---
+
+
+
 
 
 
@@ -54,12 +49,6 @@ class: center, middle
 - &lt;font size="10"&gt;How is driver performance affected by their team, the track, their age and any other factors?&lt;/font&gt;
 
 ---
-
-class: inverse, center, middle
-
-Why we chose formula e
-
----
 # Question setting and process
 
 - insert text
@@ -70,16 +59,60 @@ Why we chose formula e
 
 ---
 
-class: inverse, middle, center
+# Dataset 
 
-# Data wrangling and cleaning 
+- Our data set has 19 variables and 1480 observations
 
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
+```
+## Rows: 1,480
+## Columns: 19
+## $ season       &lt;int&gt; 2, 1, 5, 6, 6, 6, 4, 4, 4, 4, 5, 5, 1, 2, 2, 3, 3, 1, 2, …
+## $ race_num     &lt;int&gt; 2, 4, 1, 2, 3, 8, 5, 9, 10, 11, 4, 10, 1, 6, 7, 4, 11, 6,…
+## $ race_name    &lt;chr&gt; "2015 Putrajaya", "2015 Buenos Aires", "2018 Ad Diriyah",…
+## $ race_date    &lt;chr&gt; "2015-11-07", "2015-01-10", "2018-12-15", "2019-11-23", "…
+## $ driver       &lt;chr&gt; "Lucas di Grassi", "António Félix da Costa", "António Fél…
+## $ car          &lt;int&gt; 11, 55, 28, 27, 28, 28, 66, 66, 1, 1, 11, 11, 11, 11, 11,…
+## $ team         &lt;chr&gt; "ABT Schaeffler Audi Sport", "Amlin Aguri", "Andretti-BMW…
+## $ team_group   &lt;chr&gt; "Audi", "Techeetah", "BMW-Andretti", "BMW-Andretti", "BMW…
+## $ rank         &lt;chr&gt; "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1…
+## $ rank_num     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ grid         &lt;chr&gt; "6", "8", "1", "1", "2", "2", "5", "1", "5", "11", "2", "…
+## $ laps         &lt;chr&gt; "33", "35", "33", "30", "40", "35", "47", "45", "39", "43…
+## $ time_retired &lt;chr&gt; "50:17.449", "48:52.100", "46:29.377", "46:48.327", "46:1…
+## $ pts_rank     &lt;int&gt; 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 2…
+## $ pts_pole     &lt;int&gt; 0, 0, 3, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, …
+## $ pts_bonus    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, …
+## $ points       &lt;int&gt; 25, 25, 28, 28, 25, 25, 25, 29, 25, 25, 25, 26, 25, 25, 2…
+## $ location     &lt;chr&gt; "Putrajaya", "Buenos Aires", "Diriyah", "Diriyah", "Santi…
+## $ finished     &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
+```
+---
+# Data cleaning
 
-delete this text after wards (the one on top)
+- Created new binary outcome variable _finished_ and converted this to a factor
+
+--
+
+- Created new categorical predictor variable _location_ (Challenges included inconsistencies in race names, and accents)
+--
+
+- New data set with 5 variables - 2 outcomes and 3 predictors
+
+```
+## Rows: 1,118
+## Columns: 6
+## $ driver       &lt;chr&gt; "Lucas di Grassi", "António Félix da Costa", "António Fél…
+## $ team_group   &lt;chr&gt; "Audi", "Techeetah", "BMW-Andretti", "BMW-Andretti", "BMW…
+## $ location     &lt;chr&gt; "Putrajaya", "Buenos Aires", "Diriyah", "Diriyah", "Santi…
+## $ rank_num     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ finished     &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
+## $ finished_fct &lt;fct&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…
+```
+
+---
+
+
+
 
 
 ---
@@ -119,13 +152,58 @@ we have to put echo = false  {r plot-iris, echo = FALSE}
 delete this text after wards (the one on top)
 
 ---
+# Exploring Drivers
+--
+&lt;img src="presentation_files/figure-html/driver graph 1-1.png" width="80%" /&gt;
+---
+# Exploring Drivers
+&lt;img src="presentation_files/figure-html/driver graph 2-1.png" width="80%" /&gt;
+---
+# Exploring Drivers
 
-# model selection (Hylda)
-- insert text 
+```
+## `geom_smooth()` using formula = 'y ~ x'
+```
+
+&lt;img src="presentation_files/figure-html/driver graph 3-1.png" width="80%" /&gt;
+---
+# Exploring Drivers
+&lt;img src="presentation_files/figure-html/driver graph 4-1.png" width="80%" /&gt;
+---
+# Exploring Drivers
+&lt;img src="presentation_files/figure-html/driver graph 5-1.png" width="80%" /&gt;
+---
+# Exploring Drivers
+&lt;img src="presentation_files/figure-html/driver graph 6-1.png" width="80%" /&gt;
+---
+# Exploring Track Locations
+--
+&lt;img src="presentation_files/figure-html/location graphs 1-1.png" width="80%" /&gt;
+---
+# Exploring Track Locations
+&lt;img src="presentation_files/figure-html/location graphs 2-1.png" width="80%" /&gt;
+---
+# Exploring Locations
+&lt;img src="presentation_files/figure-html/location graphs 3-1.png" width="80%" /&gt;
+---
+# Exploring the effect of Teams
+--
+&lt;img src="presentation_files/figure-html/team graph 1-1.png" width="80%" /&gt;
+---
+# Exploring the effect of Teams
+&lt;img src="presentation_files/figure-html/team graph 2-1.png" width="80%" /&gt;
+---
+# Model Selection 
+ 1)	Choosing the variable to predict and the predictors
+- We choose to predict the variable finished, which indicates whether the driver finished the race or not. This is chosen as it depicts the driver’s performance throughout the race. 
+- The variable that we choose to be the predictor is the driver itself,  the team group, and the location of the race being held. This is chosen based on the correlation depicted by visualisation before.
+
 
 --
+2)	Choosing the type of model and engine
+- Logistic regression is a GLM used to model a binary categorical outcome using numerical and categorical predictors.  Since we were predicting whether they finished the race or not, this falls under binary categorical outcome. The predictors also consist of numerical and categorical predictors. The team group and the location can be considered as categorial predictors, which fits the condition of logistic regression model
 
-- insert text 
+ 
 
 ---
 # model implementation (Farhan) 
@@ -133,29 +211,40 @@ delete this text after wards (the one on top)
 - insert text 
 --
 
-- insert text 
 
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-delete this text afterwards (the one on top)
+- Set random seed to make results reproducible
+- We used the predictors team group and location to test for finishing outcome (whether they finished the race or not)
 
 ---
 
-# model interpretation (Aiman) (I left that code there but you can delete it)
+
 
 
 ---
+# Model Interpretation
 
-# model evaluation including limitaions and possibilities for future study (Jamie)
-
-- can edit font size like this &lt;font size="10"&gt;How is driver performance affected by their team, the track, their age and any other factors?&lt;/font&gt;
- 
+1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
 --
 
-- insert text 
+
+2. This tools shows whether the predictors have a significant effect on the race result or not.
+
+
+---
+
+# Evaluating our model - 3 variables
+
+
+&lt;img src="presentation_files/figure-html/roc 3-1.png" width="80%" /&gt;
+
+---
+
+# Evaluating our model - 1 variable
+
+
+&lt;img src="presentation_files/figure-html/roc location-1.png" width="80%" /&gt;
+
+--- 
 
 # summary/ conclusions (Hylda)
 
@@ -172,7 +261,7 @@ delete this text afterwards (the one on top)
 - goes here
 ]
 .pull-right[
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
 ]
 ---
 we have to put echo = false  {r plot-iris, echo = FALSE}

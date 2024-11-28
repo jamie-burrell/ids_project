@@ -43,6 +43,86 @@ knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618,
 ```{r load-data, include=FALSE}
 # Load your data here
 formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
+```
+
+
+```{r cleaning data, include=FALSE}
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    location = case_when(
+      str_detect(race_name, "Beijing") ~ "Beijing",
+      str_detect(race_name, "Punta del Este") ~ "Punta del Este",
+      str_detect(race_name, "Putrajaya") ~ "Putrajaya",
+      str_detect(race_name, "Berlin") ~ "Berlin",
+      str_detect(race_name, "Buenos Aires") ~ "Buenos Aires",
+      str_detect(race_name, "London") ~ "London",
+      str_detect(race_name, "Long Beach") ~ "Long Beach",
+      str_detect(race_name, "Miami") ~ "Miami",
+      str_detect(race_name, "Monaco") ~ "Monaco",
+      str_detect(race_name, "Moscow") ~ "Moscow",
+      str_detect(race_name, "Hong Kong") ~ "Hong Kong",
+      str_detect(race_name, "Marrakesh") ~ "Marrakesh",
+      str_detect(race_name, "Mexico City") ~ "Mexico City",
+      str_detect(race_name, "Paris") ~ "Paris",
+      str_detect(race_name, "Montreal") ~ "Montreal",
+      str_detect(race_name, "New York City") ~ "New York City",
+      str_detect(race_name, "Diriyah") ~ "Diriyah",
+      str_detect(race_name, "Rome") ~ "Rome",
+      str_detect(race_name, "Santiago") ~ "Santiago",
+      str_detect(race_name, "Sanya") ~ "Sanya",
+      str_detect(race_name, "Swiss") ~ "Bern",
+      TRUE ~ "Zurich"
+    )
+  )
+
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    finished = case_when(
+      str_detect(time_retired, "W") ~ FALSE,
+      str_detect(time_retired, "U") ~ FALSE,
+      str_detect(time_retired, "T") ~ FALSE,
+      str_detect(time_retired, "A") ~ FALSE,
+      str_detect(time_retired, "S") ~ FALSE,
+      str_detect(time_retired, "R") ~ FALSE,
+      str_detect(time_retired, "w") ~ FALSE,
+      str_detect(time_retired, "P") ~ FALSE,
+      str_detect(time_retired, "M") ~ FALSE,
+      str_detect(time_retired, "O") ~ FALSE,
+      str_detect(time_retired, "H") ~ FALSE,
+      str_detect(time_retired, "G") ~ FALSE,
+      str_detect(time_retired, "F") ~ FALSE,
+      str_detect(time_retired, "E") ~ FALSE,
+      str_detect(time_retired, "D") ~ FALSE,
+      str_detect(time_retired, "C") ~ FALSE,
+      str_detect(time_retired, "B") ~ FALSE,
+      TRUE ~ TRUE
+    )
+  )
+
+raceresults_cleaned <- formula_e_race_results %>%
+  select(
+    driver, team_group, location, rank_num, finished
+  )
+
+raceresults_factored <- raceresults_cleaned %>%
+  mutate(
+    finished_fct = case_when(
+      finished == TRUE ~ "TRUE",
+      finished == FALSE ~ "FALSE"
+    ),
+  finished_fct = fct_relevel(finished_fct, "TRUE", "FALSE"))
+
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(driver) %>%
+  filter(n() >= 20) %>%
+  ungroup()
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(location) %>%
+  filter(n() > 24) %>%
+  ungroup()
+
 
 ```
 
@@ -64,12 +144,6 @@ class: center, middle
 - <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
 
 ---
-
-class: inverse, center, middle
-
-Why we chose formula e
-
----
 # Question setting and process
 
 - insert text
@@ -80,16 +154,31 @@ Why we chose formula e
 
 ---
 
-class: inverse, middle, center
+# Dataset 
 
-# Data wrangling and cleaning 
+- Our data set has 19 variables and 1480 observations
+``` {r glimpse dataset, echo = FALSE}
+glimpse(formula_e_race_results)
+```
+---
+# Data cleaning
 
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
+- Created new binary outcome variable _finished_ and converted this to a factor
 
-delete this text after wards (the one on top)
+--
+
+- Created new categorical predictor variable _location_ (Challenges included inconsistencies in race names, and accents)
+--
+
+- New data set with 5 variables - 2 outcomes and 3 predictors
+``` {r glimpse new dataset, echo = FALSE}
+glimpse(raceresults_factored)
+```
+
+---
+
+
+
 
 
 ---
@@ -129,13 +218,272 @@ we have to put echo = false  {r plot-iris, echo = FALSE}
 delete this text after wards (the one on top)
 
 ---
+# Exploring Drivers
+--
+```{r driver graph 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+# Exploring Drivers
+```{r driver graph 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  gghighlight(driver == "Pierre Gasly", label_key = driver)
+```
+---
+# Exploring Drivers
+```{r driver graph 3, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey")
+```
+---
+# Exploring Drivers
+```{r driver graph 4, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+# Exploring Drivers
+```{r driver graph 5, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )
+```
+---
+# Exploring Drivers
+```{r driver graph 6, echo=FALSE}
+boxplot_data <- raceresults_cleaned %>%
+  filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  mutate(order = case_when(
+    driver == "Tom Dillmann" ~ 3,
+    driver == "Daniel Abt" ~ 2,
+    driver == "Stéphane Sarrazin" ~ 1,
+    driver == "Maximilian Günther" ~ 4
+  ))
 
-# model selection (Hylda)
-- insert text 
+boxplot_data %>%
+  ggplot(mapping = aes(
+    x = reorder(driver, order),
+    y = rank_num,
+    fill = driver
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+---
+# Exploring Track Locations
+--
+```{r location graphs 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
+```
+---
+# Exploring Track Locations
+```{r location graphs 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished)
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location,
+    fill = location
+  )) +
+  scale_fill_manual(values = c(
+    "Sanya" = "#c21fd4",
+    "Moscow" = "#c21fd4",
+    "Zurich" = "#c21fd4",
+    "Miami" = "#c21fd4",
+    "Bern" = "#c21fd4"
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
+```
+---
+# Exploring Locations
+```{r location graphs 3, echo=FALSE}
+raceresults_cleaned %>% 
+  group_by(location) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count > 24) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = location
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    y = "Track Location",
+    x = "Observed Probability of DNFs"
+  )
+
+```
+---
+# Exploring the effect of Teams
+--
+```{r team graph 1, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
+```
+---
+# Exploring the effect of Teams
+```{r team graph 2, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(team_group) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    count = n()
+  ) %>%
+  filter(count >= 20) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = team_group,
+    fill = team_group
+  )) +
+  scale_fill_manual(values = c(
+    "Trulli" = "#2ab6ed"
+  )) +
+  geom_col() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Team"
+  )
+```
+---
+# Model Selection 
+ 1)	Choosing the variable to predict and the predictors
+- We choose to predict the variable finished, which indicates whether the driver finished the race or not. This is chosen as it depicts the driver’s performance throughout the race. 
+- The variable that we choose to be the predictor is the driver itself,  the team group, and the location of the race being held. This is chosen based on the correlation depicted by visualisation before.
+
 
 --
+2)	Choosing the type of model and engine
+- Logistic regression is a GLM used to model a binary categorical outcome using numerical and categorical predictors.  Since we were predicting whether they finished the race or not, this falls under binary categorical outcome. The predictors also consist of numerical and categorical predictors. The team group and the location can be considered as categorial predictors, which fits the condition of logistic regression model
 
-- insert text 
+ 
 
 ---
 # model implementation (Farhan) 
@@ -144,13 +492,6 @@ delete this text after wards (the one on top)
 --
 ```{r, echo=TRUE}
 
-set.seed(28)
-raceresults_split <- initial_split(raceresults_factored)
-raceresults_train <- training(raceresults_split)
-raceresults_test <- testing(raceresults_split)
-
-raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
-  step_dummy(all_nominal(), -all_outcomes())
 
 ```
 
@@ -170,7 +511,9 @@ raceresults_wflow <- workflow() %>%
 -Created workflow to effectively combine steps in order to train data easily
 
 ---
+# Model Interpretation
 
+<<<<<<< HEAD
 Model Implementation (Training the data)
 --
 ```{r, echo=TRUE}
@@ -188,17 +531,94 @@ raceresults_pred
 
 ---
 # model interpretation (Aiman) (I left that code there but you can delete it)
+=======
+1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
+--
+
+
+2. This tools shows whether the predictors have a significant effect on the race result or not.
+>>>>>>> 3ecd9347bc6e3794523666b632d9871042794b07
 
 
 ---
 
-# model evaluation including limitaions and possibilities for future study (Jamie)
+# Evaluating our model - 3 variables
+``` {r model with 3, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
 
-- can edit font size like this <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
- 
---
 
-- insert text 
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+```{r roc 3, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
+
+---
+
+# Evaluating our model - 1 variable
+``` {r model with location, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
+
+
+raceresults_rec <- recipe(finished_fct ~ location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+``` {r roc location, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
+
+--- 
 
 # summary/ conclusions (Hylda)
 
