@@ -38,6 +38,8 @@ library(gghighlight)
 ```{r setup, include=FALSE}
 # For better figure resolution
 knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
+
+options(warn = -1)
 ```
 
 ```{r load-data, include=FALSE}
@@ -132,7 +134,7 @@ raceresults_factored <- raceresults_factored %>%
 style_xaringan(
   title_slide_background_image = "img/intro picture.jpg",
   title_slide_text_color = "white",
-  background_color = "#2ab6ed", "white", "#c21fd4",
+  background_color = "#191970", "white", "#87CEEB",
   text_font_google = google_font("Work Sans", "300", "300i"),
   code_font_google = google_font("IBM Plex Mono"), 
   text_font_size = "1.2rem"
@@ -141,16 +143,46 @@ style_xaringan(
 ```
 class: center, middle
 
-- <font size="10">How is driver performance affected by their team, the track, their age and any other factors?</font>
+# Question
+- Based on this data set, what factors can affect driver performance within a race?
 
 ---
-# Question setting and process
+# Why Formula E?
 
-- insert text
+- This was a topic of interest among team members
+
 --
 
-- insert text
+- The data set was formatted well with useful predictor and outcome variables
 
+--
+
+- The data set was large enough (sufficient observations) to make valid conclusions but not too large compared to other data sets
+
+--
+## Challenges
+- Not enough quantitative data
+- Many categorical variables
+
+
+---
+# What are we analysing?
+
+- Evaluating the performance of Formula E drivers based on different factors, focusing on:
+--
+
+- Location ( _location_)
+- Team ( _team_group_)
+- Ranking ( _rank_num_)
+- Number of DNFs (finishing the race or not, _finished_)
+
+--
+
+## This helps us identify:
+- Driver consistency
+- Impact of team
+- Comparison between drivers
+- Potential patterns or trends in driver performance
 
 ---
 
@@ -177,45 +209,45 @@ glimpse(raceresults_factored)
 
 ---
 
+# Summary statistics
 
-
-
-
----
-
-# insert subtitle (Joel)
-
-- insert text
---
-
-- insert text (the -- makes the text appear incrementally)
-
---
-
-- insert text 
-
-- can edit the font size like this: 
----
-
-# Summary statistics (Yara)
-
-- insert text..
-
+``` {r summary statistics, echo=FALSE}
+ 
+formula_e_race_results$grid <- as.numeric(as.character(formula_e_race_results$grid))
+ 
+summary_stats <- formula_e_race_results %>%
+  group_by(driver) %>%  
+  summarise(
+    avg_rank = mean(rank_num, na.rm = TRUE),
+    median_rank = median(rank_num, na.rm = TRUE),
+    rank_sd = sd(rank_num, na.rm = TRUE),
+    avg_grid = mean(grid, na.rm = TRUE),
+    avg_points = mean(points, na.rm = TRUE)
+  ) %>%
+  
+  arrange(desc(avg_points))  
+ 
+top_10_stats <- head(summary_stats, 10)
+ 
+print(top_10_stats)
+```
 
 ---
-
-# data visualisations (Joel)
-
-- insert text
+# Summary statistics
+- limited it to the top 10 drivers just to provide a brief overview of what the data looks like.
+ 
+- To convert the data to the right format we converted grid column to a numeric using as.numeric(as.character(formula_e_race_results$grid))
+ 
+- This was necessary in order to calculate the average grid position
 --
 
-- insert text (add code)
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
+## Some aspects to highlight:
+ 
+- Top drivers: Sebastien Buemi and Lucas Di Grassi have the highest average points, this indicates consistent high performance. 
 
-delete this text after wards (the one on top)
+- Consistency: Pierre Gasly has the lowest rank standard deviation (2.12), suggesting he is the most consistent driver in terms of finishing positions.
+
+- Median: the median rank illustrates the typical finishing position of each driver, with Pierre Gasly and Sebastien Buemi having some of the best median ranks (5 and 5.5).
 
 ---
 # Exploring Drivers
@@ -256,7 +288,7 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  ) +
+  ) 
   gghighlight(driver == "Pierre Gasly", label_key = driver)
 ```
 ---
@@ -279,6 +311,7 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
   ) +
+  ylim(10, 14) +
   geom_smooth(method = "lm", se = FALSE, colour = "grey")
 ```
 ---
@@ -301,7 +334,7 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  )
+  ) 
 ```
 ---
 # Exploring Drivers
@@ -323,7 +356,7 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  )
+  ) 
 ```
 ---
 # Exploring Drivers
@@ -475,20 +508,17 @@ raceresults_cleaned %>%
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors
-- We choose to predict the variable finished, which indicates whether the driver finished the race or not. This is chosen as it depicts the driver’s performance throughout the race. 
-- The variable that we choose to be the predictor is the driver itself,  the team group, and the location of the race being held. This is chosen based on the correlation depicted by visualisation before.
 
 
 --
 2)	Choosing the type of model and engine
-- Logistic regression is a GLM used to model a binary categorical outcome using numerical and categorical predictors.  Since we were predicting whether they finished the race or not, this falls under binary categorical outcome. The predictors also consist of numerical and categorical predictors. The team group and the location can be considered as categorial predictors, which fits the condition of logistic regression model
 
  
 
 ---
-# model implementation (Farhan) 
+# Model Implementation
 
-- Model Implementation (Splitting the data & creating the recipe)
+## Splitting the data & creating the recipe
 --
 ```{r, echo=TRUE}
 set.seed(28)
@@ -507,11 +537,11 @@ raceresults_mod <- logistic_reg() %>%
 ```
 
 - Set random seed to make results reproducible
-- We used the predictors team group and location to test for finishing outcome (whether they finished the race or not)
+- We used the predictors driver, team group and location to test for finishing outcome (whether they finished the race or not)
 
 ---
 
-Model Implementation (Workflow)
+# Model Implementation (Workflow)
 --
 ```{r, echo=TRUE}
 raceresults_wflow <- workflow() %>%
@@ -519,10 +549,10 @@ raceresults_wflow <- workflow() %>%
   add_model(raceresults_mod)
 ```
 
--Created workflow to effectively combine steps in order to train data easily
+- Created workflow to effectively combine steps in order to train data easily
 
 ---
-Model Implementation (Training the data)
+# Model Implementation (Training the data)
 --
 ```{r, echo=TRUE}
 raceresults_fit <- raceresults_wflow %>%
@@ -538,11 +568,10 @@ raceresults_pred
 -Creates a reliable model which is now trained to make predictions based on the variables it's fed
 
 ---
-# model interpretation (Aiman) (I left that code there but you can delete it)
+# Model Interpretation
 
 1. We used estimation coefficient and p-values to interpret the multiple predictors (driver, team group and location)
 --
-
 
 2. This tools shows whether the predictors have a significant effect on the race result or not.
 
@@ -626,115 +655,7 @@ raceresults_pred %>%
 ```
 
 --- 
-
-# summary/ conclusions (Hylda)
-
-- insert text 
-
+class: inverse, centre, middle
+# Thank you
 --
-
-- insert text 
-
----
-
-.pull-left[
-- Some text
-- goes here
-]
-.pull-right[
-```{r warning=FALSE, out.width="100%", fig.width=4, echo=FALSE}
-# see how I changed out.width and fig.width from defaults
-# to make the figure bigger
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-]
----
-we have to put echo = false  {r plot-iris, echo = FALSE}
-# Code hidden with echo = FALSE
-# Uses modified iris dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-delete this text after wards (the one on top)
-
-
-
-
-
-(extra instrctions in the bottom)
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r iris-table, echo = FALSE}
-kable(head(iris), format = "html")
-```
-
----
-
-# Images
-
-```{r castle, echo = FALSE, out.width = "55%", fig.align = "center", fig.cap = "Image credit: Photo by Jörg Angeli on Unsplash."}
-include_graphics("img/edinburgh-castle.jpg")
-```
-
-Or you can also include a full page image. See next slide.
-
-# Layouts
-
-You can use plain text
-
-- or bullet points
-
-.pull-left[
-or text in two columns $^*$
-]
-.pull-right[
-- like
-- this
-]
-
-.footnote[
-[*] And add footnotes
-]
-
----
-
----
-
-
-class: inverse, center, middle
-background-image: url(img/edinburgh-castle.jpg)
-background-size: contain
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# Feeling adventurous?
-
-- Want to find out more about `xaringan`? See https://slides.yihui.name/xaringan/#1.
-
-- You are welcome to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
-- But some of you might want to play around with slide styling. The 
-`xaringanthemer` provides some solutions for this that: https://pkg.garrickadenbuie.com/xaringanthemer.
-
-- And if you want more bells and whistles, there is also `xaringanExtra`: https://pkg.garrickadenbuie.com/xaringanExtra.
+# Questions?
