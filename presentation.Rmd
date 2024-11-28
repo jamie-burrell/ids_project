@@ -573,7 +573,12 @@ raceresults_pred
 
 ---
 
-# Evaluating our model - 3 variables
+# Evaluating Our Model
+
+.panelset[
+
+.panel[.panel-name[3 Variables]
+
 ``` {r model with 3, include = FALSE}
 set.seed(28)
 raceresults_split <- initial_split(raceresults_factored)
@@ -600,7 +605,7 @@ raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>
 raceresults_pred
 ```
 
-```{r roc 3, echo = FALSE}
+```{r roc 3, echo = FALSE, fig.show='hide', warning=FALSE}
 raceresults_pred %>%
   roc_curve(
     truth = finished_fct,
@@ -610,9 +615,12 @@ raceresults_pred %>%
   autoplot()
 ```
 
----
+```{r ref.label = "roc 3", echo = FALSE, warning = FALSE, out.width = "60%"}
+```
+]
 
-# Evaluating our model - 1 variable
+.panel[.panel-name[1 Variable]
+
 ``` {r model with location, include = FALSE}
 set.seed(28)
 raceresults_split <- initial_split(raceresults_factored)
@@ -639,7 +647,7 @@ raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>
 raceresults_pred
 ```
 
-``` {r roc location, echo = FALSE}
+``` {r roc location, echo = FALSE, fig.show='hide', warning=FALSE}
 raceresults_pred %>%
   roc_curve(
     truth = finished_fct,
@@ -649,8 +657,15 @@ raceresults_pred %>%
   autoplot()
 ```
 
---- 
+```{r ref.label = "roc location", echo = FALSE, warning = FALSE, out.width = "60%"}
+```
+]] 
+
+---
+
 class: inverse, centre, middle
+
 # Thank you
---
-# Questions?
+-- 
+
+##Any Questions?
