@@ -235,13 +235,6 @@ print(top_10_stats)
 ```
 
 ---
-# Summary statistics
-- limited it to the top 10 drivers just to provide a brief overview of what the data looks like.
- 
-- To convert the data to the right format we converted grid column to a numeric using as.numeric(as.character(formula_e_race_results$grid))
- 
-- This was necessary in order to calculate the average grid position
---
 
 ## Some aspects to highlight:
  
