@@ -247,7 +247,7 @@ print(top_10_stats)
 ---
 # Exploring Drivers
 --
-```{r driver graph 1, echo=FALSE}
+```{r full_driver_plot, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -267,14 +267,15 @@ raceresults_cleaned %>%
 ```
 ---
 # Exploring Drivers
-```{r driver graph 2, echo=FALSE}
+```{r filtered_driver_graph, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
     proportion_DNF = 1 - mean(finished),
     avg_position = mean(rank_num),
     count = n()
-  ) %>%
+  ) %>% 
+  filter(count >=15) %>%
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = avg_position
@@ -284,11 +285,10 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
   ) 
-  gghighlight(driver == "Pierre Gasly", label_key = driver)
 ```
 ---
 # Exploring Drivers
-```{r driver graph 3, echo=FALSE}
+```{r regression_driver_graph, echo=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -306,30 +306,7 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
   ) +
-  ylim(10, 14) +
   geom_smooth(method = "lm", se = FALSE, colour = "grey")
-```
----
-# Exploring Drivers
-```{r driver graph 4, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(driver) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    avg_position = mean(rank_num),
-    count = n()
-  ) %>% 
-  filter(count >=15) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = avg_position
-  )) +
-  geom_point() +
-  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
-  labs(
-    x = "Observed Probability of DNF",
-    y = "Average Finishing Posiiton"
-  ) 
 ```
 ---
 # Exploring Drivers
@@ -355,7 +332,7 @@ raceresults_cleaned %>%
 ```
 ---
 # Exploring Drivers
-```{r driver graph 6, echo=FALSE}
+```{r driver_boxplot, echo=FALSE}
 boxplot_data <- raceresults_cleaned %>%
   filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
   mutate(order = case_when(
@@ -379,127 +356,7 @@ boxplot_data %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
----
-# Exploring Track Locations
---
-```{r location graphs 1, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished)
-  ) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Observed Probability of DNFs"
-  )
-```
----
-# Exploring Track Locations
-```{r location graphs 2, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished)
-  ) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location,
-    fill = location
-  )) +
-  scale_fill_manual(values = c(
-    "Sanya" = "#c21fd4",
-    "Moscow" = "#c21fd4",
-    "Zurich" = "#c21fd4",
-    "Miami" = "#c21fd4",
-    "Bern" = "#c21fd4"
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Observed Probability of DNFs"
-  )
-```
----
-# Exploring Locations
-```{r location graphs 3, echo=FALSE}
-raceresults_cleaned %>% 
-  group_by(location) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    count = n()
-  ) %>%
-  filter(count > 24) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = location
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    y = "Track Location",
-    x = "Observed Probability of DNFs"
-  )
 
-```
----
-# Exploring the effect of Teams
---
-```{r team graph 1, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(team_group) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    count = n()
-  ) %>%
-  filter(count >= 20) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = team_group
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Observed Probability of DNF",
-    y = "Team"
-  )
-```
----
-# Exploring the effect of Teams
-```{r team graph 2, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(team_group) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    count = n()
-  ) %>%
-  filter(count >= 20) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = team_group,
-    fill = team_group
-  )) +
-  scale_fill_manual(values = c(
-    "Trulli" = "#2ab6ed"
-  )) +
-  geom_col() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  labs(
-    x = "Observed Probability of DNF",
-    y = "Team"
-  )
-```
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors
