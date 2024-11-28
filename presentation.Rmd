@@ -33,6 +33,8 @@ library(knitr)
 library(xaringanthemer)
 library(ggplot2)
 library(gghighlight)
+library(xaringanExtra)
+xaringanExtra::use_panelset()
 ```
 
 ```{r setup, include=FALSE}
@@ -331,8 +333,14 @@ raceresults_cleaned %>%
   ) 
 ```
 ---
-# Exploring Drivers
-```{r comparing_drivers, echo=FALSE}
+# Visualisations
+
+.panelset[
+
+.panel[.panel-name[Points]
+
+.pull-left[
+```{r comparing_drivers, echo=FALSE, fig.show='hide', warning=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -352,8 +360,23 @@ raceresults_cleaned %>%
     y = "Average Finishing Posiiton"
   ) 
 ```
----
-# Exploring Drivers
+
+```{r ref.label = "comparing_drivers", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+.pull-right[
+- Two sets of drivers: Stéphane Sarrazin/Daniel Abt & Tom Dillmann/Maximilian Günther
+
+- Each pair has a similar average finishing position
+
+- Results are compared in depth by boxplots
+]
+]
+
+.panel[.panel-name[Boxplot]
+
+.pull-left[
 ```{r driver_boxplot, echo=FALSE, fig.show='hide', warning=FALSE}
 boxplot_data <- raceresults_cleaned %>%
   filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
@@ -370,6 +393,12 @@ boxplot_data %>%
     y = rank_num,
     fill = driver
   )) +
+  scale_fill_manual(values = c(
+    "Tom Dillmann" = "#E1D3F8",
+    "Daniel Abt" = "#C5DBC4", 
+    "Stéphane Sarrazin" = "#C5DBC4", 
+    "Maximilian Günther" = "#E1D3F8"
+  )) +
   geom_boxplot(coef = 1) +
   labs(
     y = "Final Position",
@@ -378,9 +407,19 @@ boxplot_data %>%
   theme_minimal() +
   theme(legend.position = "none")
 ```
-```{r ref.label = "driver_boxplot", echo = FALSE, warning = FALSE, out.width=60%}
-```
 
+```{r ref.label = "driver_boxplot", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+.pull-right[
+- Boxplots show the distribution of each driver's final position
+
+- Lower IQR for those with lower probability of a DNF
+
+- Lower IQR corresponds to more consistent results
+]
+]]
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors

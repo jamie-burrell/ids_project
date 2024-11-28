@@ -6,6 +6,8 @@
     <meta name="author" content="Table 5 Tekkers   Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi" />
     <meta name="date" content="2024-11-28" />
     <script src="libs/header-attrs-2.28/header-attrs.js"></script>
+    <link href="libs/panelset-0.3.0/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset-0.3.0/panelset.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
@@ -191,13 +193,43 @@ class: center, middle
 # Exploring Drivers
 &lt;img src="presentation_files/figure-html/best_drivers_plot-1.png" width="80%" /&gt;
 ---
-# Exploring Drivers
-&lt;img src="presentation_files/figure-html/comparing_drivers-1.png" width="80%" /&gt;
----
-# Exploring Drivers
+# Visualisations
 
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+.panelset[
 
+.panel[.panel-name[Points]
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+- Two sets of drivers: Stéphane Sarrazin/Daniel Abt &amp; Tom Dillmann/Maximilian Günther
+
+- Each pair has a similar average finishing position
+
+- Results are compared in depth by boxplots
+]
+]
+
+.panel[.panel-name[Boxplot]
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+- Boxplots show the distribution of each driver's final position
+
+- Lower IQR for those with lower probability of a DNF
+
+- Lower IQR corresponds to more consistent results
+]
+]]
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors
