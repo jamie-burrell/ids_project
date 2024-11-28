@@ -175,23 +175,75 @@ class: center, middle
 - Median: the median rank illustrates the typical finishing position of each driver, with Pierre Gasly and Sebastien Buemi having some of the best median ranks (5 and 5.5).
 
 ---
-# Exploring Drivers
---
-&lt;img src="presentation_files/figure-html/full_driver_plot-1.png" width="80%" /&gt;
----
-# Exploring Drivers
-&lt;img src="presentation_files/figure-html/filtered_driver_graph-1.png" width="80%" /&gt;
----
-# Exploring Drivers
 
-```
-## `geom_smooth()` using formula = 'y ~ x'
-```
+class: center, middle
 
-&lt;img src="presentation_files/figure-html/regression_driver_graph-1.png" width="80%" /&gt;
+# Visualisations
+
 ---
-# Exploring Drivers
-&lt;img src="presentation_files/figure-html/best_drivers_plot-1.png" width="80%" /&gt;
+# Visualisations
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+]
+
+---
+# Visualisations
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+]
+---
+# Visualisations
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-4-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+- Positive correlation is apparent
+]
+---
+# Visualisations
+
+.pull-left[
+
+
+&lt;img src="presentation_files/figure-html/unnamed-chunk-5-1.png" width="100%" /&gt;
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+- Positive correlation is apparent
+
+- Best drivers lie below the regression line
+]
 ---
 # Visualisations
 
@@ -202,7 +254,7 @@ class: center, middle
 .pull-left[
 
 
-&lt;img src="presentation_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-6-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -219,7 +271,7 @@ class: center, middle
 .pull-left[
 
 
-&lt;img src="presentation_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+&lt;img src="presentation_files/figure-html/unnamed-chunk-7-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
@@ -230,6 +282,12 @@ class: center, middle
 - Lower IQR corresponds to more consistent results
 ]
 ]]
+---
+
+class: center, middle
+
+# Modelling
+
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors

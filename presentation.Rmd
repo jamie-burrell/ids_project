@@ -247,9 +247,16 @@ print(top_10_stats)
 - Median: the median rank illustrates the typical finishing position of each driver, with Pierre Gasly and Sebastien Buemi having some of the best median ranks (5 and 5.5).
 
 ---
-# Exploring Drivers
---
-```{r full_driver_plot, echo=FALSE}
+
+class: center, middle
+
+# Visualisations
+
+---
+# Visualisations
+
+.pull-left[
+```{r full_driver_plot, echo=FALSE, fig.show='hide', warning=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -265,11 +272,27 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  )
+  ) +
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
 ```
+
+```{r ref.label = "full_driver_plot", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+]
+
 ---
-# Exploring Drivers
-```{r filtered_driver_graph, echo=FALSE}
+# Visualisations
+
+.pull-left[
+```{r filtered_driver_graph, echo=FALSE, fig.show='hide', warning=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -277,28 +300,7 @@ raceresults_cleaned %>%
     avg_position = mean(rank_num),
     count = n()
   ) %>% 
-  filter(count >=15) %>%
-  ggplot(mapping = aes(
-    x = proportion_DNF,
-    y = avg_position
-  )) +
-  geom_point() +
-  labs(
-    x = "Observed Probability of DNF",
-    y = "Average Finishing Posiiton"
-  ) 
-```
----
-# Exploring Drivers
-```{r regression_driver_graph, echo=FALSE}
-raceresults_cleaned %>%
-  group_by(driver) %>%
-  summarise(
-    proportion_DNF = 1 - mean(finished),
-    avg_position = mean(rank_num),
-    count = n()
-  ) %>% 
-  filter(count >=15) %>%
+  filter(count >=10) %>%
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = avg_position
@@ -308,11 +310,26 @@ raceresults_cleaned %>%
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
   ) +
-  geom_smooth(method = "lm", se = FALSE, colour = "grey")
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
 ```
+
+```{r ref.label = "filtered_driver_graph", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+]
 ---
-# Exploring Drivers
-```{r best_drivers_plot, echo=FALSE}
+# Visualisations
+
+.pull-left[
+```{r regression_driver_graph, echo=FALSE, fig.show='hide', warning=FALSE, message=FALSE}
 raceresults_cleaned %>%
   group_by(driver) %>%
   summarise(
@@ -320,7 +337,46 @@ raceresults_cleaned %>%
     avg_position = mean(rank_num),
     count = n()
   ) %>% 
-  filter(count >=15) %>%
+  filter(count >=10) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey") + 
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
+```
+
+```{r ref.label = "regression_driver_graph", echo = FALSE, warning = FALSE, message=FALSE, out.width = "100%"}
+```
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+- Positive correlation is apparent
+]
+---
+# Visualisations
+
+.pull-left[
+```{r best_drivers_plot, echo=FALSE, fig.show='hide', warning=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=10) %>%
   ggplot(mapping = aes(
     x = proportion_DNF,
     y = avg_position
@@ -330,8 +386,25 @@ raceresults_cleaned %>%
   labs(
     x = "Observed Probability of DNF",
     y = "Average Finishing Posiiton"
-  ) 
+  )  + 
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
 ```
+
+```{r ref.label = "best_drivers_plot", echo = FALSE, warning = FALSE, out.width = "100%"}
+```
+]
+
+.pull-right[
+- All drivers average position plotted against their probability of a DNF
+
+- Outliers are removed when you only consider drivers who have competed in multiple races
+
+- Positive correlation is apparent
+
+- Best drivers lie below the regression line
+]
 ---
 # Visualisations
 
@@ -420,6 +493,12 @@ boxplot_data %>%
 - Lower IQR corresponds to more consistent results
 ]
 ]]
+---
+
+class: center, middle
+
+# Modelling
+
 ---
 # Model Selection 
  1)	Choosing the variable to predict and the predictors
