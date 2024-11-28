@@ -132,7 +132,7 @@ raceresults_factored <- raceresults_factored %>%
 style_xaringan(
   title_slide_background_image = "img/intro picture.jpg",
   title_slide_text_color = "white",
-  background_color = "#2ab6ed", "white", "#c21fd4",
+  background_color = "#191970", "white", "#87CEEB",
   text_font_google = google_font("Work Sans", "300", "300i"),
   code_font_google = google_font("IBM Plex Mono"), 
   text_font_size = "1.2rem"
