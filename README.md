@@ -23,19 +23,17 @@ This is a template repository for your group project. One of your group members 
 
 
 
-## Task list
+## Project structure
 
-(Optional) Use the space below to structure your group project and to distribute tasks amongst members. It is not expected that every member makes a contribution to each component of the investigation, but you should aim to share the work fairly that utilises each other's strengths (eg. coding, analysis, report writing, etc.)
-
-- Introduction (Muhammad)
-- Question setting (Jamie)
-- Data cleaning (Jamie)
-- Summary statistics (Joel)
-- Data visualisations (Yara/Joel)
-- Deciding a model
-- Modelling
-- Interpeting/evaluating model
-- Questions
+- Introduction
+- Question setting
+- Data wrangling and cleaning
+- Summary statistics
+- Visualisations
+- Model selection
+- Model implementation
+- Model interpretation
+- Model evaluation and reflections
 
 ## Planning
 - 20th October - Initial meeting in workshop and data set selection
@@ -43,12 +41,8 @@ This is a template repository for your group project. One of your group members 
 - w/c 28th Oct/4th Nov - Exploratory data analysis, and refining question as we learned about modelling in lectures
 - 11th Nov - Meeting to finish visualisations and start thinking about what models we could use
 - 20th Nov - Meeting to finish data wrangling and cleaning, and conclude exploratory data analysis. Planned what model to use and decided structure of presentation and report
-
-
-
-## Check-in 2 (week 10)
-
-- Add team members to ReadMe
-- 
-- item 2
-- etc.
+- 22nd Nov - Check in with tutor, and finished model evaluation with ROC/AUC
+- 25th Nov - Met to allocate responsibilities for final week and begin work on report and presentation
+- 28th Nov - Met to practice presentation and make final edits to presentation
+- 29th Nov - Presentation
+- 30th Nov - Final edits to, and submit report. Tidy up GitHub

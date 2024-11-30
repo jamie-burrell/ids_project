@@ -1,106 +1,441 @@
 ---
-title: "Formula E champion analysis"
-author: "Table_5_tekkers: Aiman, Jamie, Farhan, Hylda, Joel, Yara"
+title: "IDS Group Project"
+subtitle: "Formula E Race Result"
+author: "Table 5 Tekkers <br> Joel Barron, Jamie Burrell, Farhan Khan, Yara Kanaan,Muhammad Aiman, Hylda Azizi"
+institute: "University of Edinburgh"
 date: "`r Sys.Date()`"
 output: html_document
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r load-lib, include = FALSE}
+```{r load-packages, include = FALSE}
+# Add any additional packages you need to this chunk
 library(tidyverse)
 library(tidymodels)
-# Add any other libraries here
-
-
-
+library(knitr)
+library(ggplot2)
+library(gghighlight)
 ```
 
+```{r setup, include=FALSE}
+# For better figure resolution
+knitr::opts_chunk$set(fig.retina = 3, dpi = 300, fig.width = 6, fig.asp = 0.618, out.width = "80%")
+
+options(warn = -1)
+```
 
 ```{r load-data, include=FALSE}
-# load your data here and any pre-processing/cleaning 
-#  that you need for your report.
-
+# Load your data here
 formula_e_race_results <- read.csv("data/formula_e_race_results.csv")
+```
 
+
+```{r cleaning data, include=FALSE}
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    location = case_when(
+      str_detect(race_name, "Beijing") ~ "Beijing",
+      str_detect(race_name, "Punta del Este") ~ "Punta del Este",
+      str_detect(race_name, "Putrajaya") ~ "Putrajaya",
+      str_detect(race_name, "Berlin") ~ "Berlin",
+      str_detect(race_name, "Buenos Aires") ~ "Buenos Aires",
+      str_detect(race_name, "London") ~ "London",
+      str_detect(race_name, "Long Beach") ~ "Long Beach",
+      str_detect(race_name, "Miami") ~ "Miami",
+      str_detect(race_name, "Monaco") ~ "Monaco",
+      str_detect(race_name, "Moscow") ~ "Moscow",
+      str_detect(race_name, "Hong Kong") ~ "Hong Kong",
+      str_detect(race_name, "Marrakesh") ~ "Marrakesh",
+      str_detect(race_name, "Mexico City") ~ "Mexico City",
+      str_detect(race_name, "Paris") ~ "Paris",
+      str_detect(race_name, "Montreal") ~ "Montreal",
+      str_detect(race_name, "New York City") ~ "New York City",
+      str_detect(race_name, "Diriyah") ~ "Diriyah",
+      str_detect(race_name, "Rome") ~ "Rome",
+      str_detect(race_name, "Santiago") ~ "Santiago",
+      str_detect(race_name, "Sanya") ~ "Sanya",
+      str_detect(race_name, "Swiss") ~ "Bern",
+      TRUE ~ "Zurich"
+    )
+  )
+
+formula_e_race_results <- formula_e_race_results %>%
+  mutate(
+    finished = case_when(
+      str_detect(time_retired, "W") ~ FALSE,
+      str_detect(time_retired, "U") ~ FALSE,
+      str_detect(time_retired, "T") ~ FALSE,
+      str_detect(time_retired, "A") ~ FALSE,
+      str_detect(time_retired, "S") ~ FALSE,
+      str_detect(time_retired, "R") ~ FALSE,
+      str_detect(time_retired, "w") ~ FALSE,
+      str_detect(time_retired, "P") ~ FALSE,
+      str_detect(time_retired, "M") ~ FALSE,
+      str_detect(time_retired, "O") ~ FALSE,
+      str_detect(time_retired, "H") ~ FALSE,
+      str_detect(time_retired, "G") ~ FALSE,
+      str_detect(time_retired, "F") ~ FALSE,
+      str_detect(time_retired, "E") ~ FALSE,
+      str_detect(time_retired, "D") ~ FALSE,
+      str_detect(time_retired, "C") ~ FALSE,
+      str_detect(time_retired, "B") ~ FALSE,
+      TRUE ~ TRUE
+    )
+  )
+
+raceresults_cleaned <- formula_e_race_results %>%
+  select(
+    driver, team_group, location, rank_num, finished
+  )
+
+raceresults_factored <- raceresults_cleaned %>%
+  mutate(
+    finished_fct = case_when(
+      finished == TRUE ~ "TRUE",
+      finished == FALSE ~ "FALSE"
+    ),
+  finished_fct = fct_relevel(finished_fct, "TRUE", "FALSE"))
+
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(driver) %>%
+  filter(n() >= 20) %>%
+  ungroup()
+
+raceresults_factored <- raceresults_factored %>%
+  group_by(location) %>%
+  filter(n() > 24) %>%
+  ungroup()
 
 
 ```
 
 
-## Research Question
+# Introduction and Question Setting
 
-Describe your research question here. Include why this question might be of interest. 
+We chose to investigate Formula E race results because as many people follow Formula racing, we feel our results, if communicated effectively, are likely to interest the wider population. This data set allows us to identify trends in driver performance and consistency based on several factors including themselves, their team and the location of the race. This led us to our key question of _How do driver, team and location affect driver performance in Formula E races?_
 
-How is driver performance affected by their team, the track, their age and any other factors?
+# Data Cleaning
 
-This is interesting as it could help to make predictions, for example, about whether a driver would improve their performance by changing team. Many people follow Formula racing and this is a relevant topic, meaning our results, if communicated effectively, is likely to interest the wider population.
+Our chosen data set was created from the scraping of 7 seasons’ worth of data from Wikipedia resulting in a data set with 19 variables and 1480 observations. The variables were a mix of characters and integers, reflecting a mix of categorical and numerical variables. 
+
+``` {r glimpse 1, echo = FALSE}
+glimpse(formula_e_race_results)
+```
+
+We decided to add the binary outcome of whether a driver finishes their race or is forced to retire, for example because of an accident or technical fault. We used the retired_time variable to create this new _finished_ variable which is a logical TRUE/FALSE. The varied ways in which retired_time was recorded, in some cases as a time but in other cases based on laps, meant we had to account for various cases using the case_when function. 
+
+Particularly considering the possibility of accidents, we were keen to consider whether some tracks were particularly dangerous and so wanted to extract the location from the “race_name” variable which also included the year. We did this by using the str_detect function. 
+
+We then removed the variables which we were not going to use, leaving us with a much neater data set consisting of rank_num, a numerical outcome variable, _finished_, a binary outcome variable (which we converted to a factor for modelling), and _driver_, _location_ and _team_group_ as categorical predictor variables.
+
+``` {r glimpse 2, echo = FALSE}
+glimpse(raceresults_cleaned)
+```
+
+# Summary Statistics
+
+We started by exploring a summary of the statistical data for the top 10 formula E drivers. The metrics included are average rank, median rank, rank standard deviation and average points. Limiting this exploration to the first ten provided a more focused overview.
+
+``` {r summary statistics, echo=FALSE}
+ 
+formula_e_race_results$grid <- as.numeric(as.character(formula_e_race_results$grid))
+ 
+summary_stats <- formula_e_race_results %>%
+  group_by(driver) %>%  
+  summarise(
+    avg_rank = mean(rank_num, na.rm = TRUE),
+    median_rank = median(rank_num, na.rm = TRUE),
+    rank_sd = sd(rank_num, na.rm = TRUE),
+    avg_grid = mean(grid, na.rm = TRUE),
+    avg_points = mean(points, na.rm = TRUE)
+  ) %>%
+  
+  arrange(desc(avg_points))  
+ 
+top_10_stats <- head(summary_stats, 10)
+ 
+print(top_10_stats)
+```
+
+When looking at the statistics, the two drivers with the most average points are Sebastien Buemi and Lucas di Grassi, with 11.3 each, emphasizing their constant high performance. Pierre Gasly stands out for his consistency because of his low rank standard deviation of 2.12. When looking at the median rank, we see Pierre Gasly and Sebastien Buemi achieve the best median ranks, at 5 and 5.5 respectively. This makes sense since they were previously identified as good drivers through other statistics, and this shows that perhaps unsurprisingly the driver themselves are a key factor in the race outcome. 
+
+# Data Visualisations
+
+After reviewing summary statistics, we used visualisations to help us understand how different variables affect the likelihood of a finish. 
+
+We started by drawing a simple scatter plot of rank_num (finishing position) against the 1-mean of each drivers _finished_ variable: as _finished_ is logical, its mean corresponds to the proportion of results that are true. 
+
+```{r full_driver_plot, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
+```
+
+From this graph, we filtered out drivers with less than 10 races to remove outliers, then drew a simple linear regression line, which showed positive correlation between the two variables. 
+
+```{r regression_driver_graph, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=10) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey") + 
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
+```
+
+Upon analysing which points were furthest deviated from the line, we found a group of the highlighted “best drivers” lying below the line. This indicated that while how likely a driver is to finish a race being a good indicator of performance, it is not the only factor. 
+
+```{r best_drivers_plot, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=10) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Lucas di Grassi", "Sébastien Buemi", "Jean-Éric Vergne", "Sam Bird"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  )  + 
+  coord_cartesian(
+    xlim = c(-0.01, 1.01),
+    ylim = c(4.5, 20))
+```
+
+To further analyse how finishing was related to performance, we selected two sets of two drivers with similar average finishing positions, but different likelihoods of a DNF. 
+
+```{r comparing_drivers, echo=FALSE}
+raceresults_cleaned %>%
+  group_by(driver) %>%
+  summarise(
+    proportion_DNF = 1 - mean(finished),
+    avg_position = mean(rank_num),
+    count = n()
+  ) %>% 
+  filter(count >=15) %>%
+  ggplot(mapping = aes(
+    x = proportion_DNF,
+    y = avg_position
+  )) +
+  geom_point() +
+  gghighlight(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther"), label_key = driver) +
+  labs(
+    x = "Observed Probability of DNF",
+    y = "Average Finishing Posiiton"
+  ) 
+```
+
+A new data set was created with the four chosen drivers, with an extra variable _order_: this was used to reorder the boxplots so exact comparisons were beside each other. This was further emphasised by manually setting the ones to compare as the same colour. We discovered that lower probability of recording a DNF corresponded to a lower IQR in both groups. We believe that this is a product of a driver's “consistency”, thus giving another reason why the chance of a finish is a good indicator of driver performance, and better than just where a driver finishes.
+
+```{r driver_boxplot, echo=FALSE}
+boxplot_data <- raceresults_cleaned %>%
+  filter(driver %in% c("Tom Dillmann","Daniel Abt", "Stéphane Sarrazin", "Maximilian Günther")) %>%
+  mutate(order = case_when(
+    driver == "Tom Dillmann" ~ 3,
+    driver == "Daniel Abt" ~ 2,
+    driver == "Stéphane Sarrazin" ~ 1,
+    driver == "Maximilian Günther" ~ 4
+  ))
+
+boxplot_data %>%
+  ggplot(mapping = aes(
+    x = reorder(driver, order),
+    y = rank_num,
+    fill = driver
+  )) +
+  scale_fill_manual(values = c(
+    "Tom Dillmann" = "#E1D3F8",
+    "Daniel Abt" = "#C5DBC4", 
+    "Stéphane Sarrazin" = "#C5DBC4", 
+    "Maximilian Günther" = "#E1D3F8"
+  )) +
+  geom_boxplot(coef = 1) +
+  labs(
+    y = "Final Position",
+    x = "Driver"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+We also drew bar charts of the the probability of a DNF (as in the drivers' graph) for each track location and team group. These plots showed enough signs of correlation to consider them for the model, and helped identify outliers. However, we did not deem the results sufficiently significant to present them here. 
+
+# Model Selection
+The variable that we chose to predict is _finished_. We chose to predict _finished_ as it is the binary outcome of whether a driver finishes their race or is forced to retire as a result of accident, technical fault or other reason. A driver who consistently finishes races demonstrates skill in managing the car, energy, and strategy over the course of the event. Consistently finishing high-pressure races can also correlate with the ability to adapt to changing conditions such as weather, competitors and track conditions which indicate the performance of the driver. The predictors we chose are based on the visualisations above, and are the driver, the location of the race and the team.
+
+As we are predicting a logical outcome, we used a generalised linear model (GLM) which is logistic regression. Logistic regression is a GLM used to model a binary categorical outcome using numerical and categorical predictors.  
+
+```{r, echo=TRUE}
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+```
+
+# Model Implementation
+
+We did an 80-20 split of training and testing data, using 80% to train the model and leaving the remaining 20% of test data to evaluate the model's performance. To make the results reproducible, we set a random seed.
+Using the location, the driver and the team as our predictors, we made a recipe with the outcome being whether the race was completed or not ( _finished_fct_). The predictors we used are categorical variables, so we turned them into dummy variables.
+
+```{r, echo=TRUE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
+
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+```
+
+We used this recipe and our model to create a workflow which we then applied to our training data. 
+
+```{r, echo=TRUE}
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+```
+
+The result of this were estimated model coefficients showing how much each predictor (race location, driver and team) impacted the outcome of the race. 
+
+```{r, echo=TRUE}
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+```
 
 
+Positive estimates indicate that the predictor increases the probability of the driver not finishing the race ( _finished_ = FALSE) compared to the baseline, while negative estimates decrease the probability of a DNF.
+Based on the model, the driver with the highest positive coefficient is Maximillian Gunther with an estimate of 1.6830. Thus, it means that this driver is significantly more likely not to finish his race. For the team group, BMW Andretti has an estimate of -0.7857 which is the highest negative coefficient among all the team groups. This shows that BMW Andretti drivers are much more likely to finish their races than drivers from the baseline team (Audi). 
 
-## Data
+We then used the test data to evaluate how the model does making predictions based on unseen variables in the testing data, to guard against overfitting.
 
-Briefly describe your dataset here - include a description of the key variables you will be investigating. 
-Include a citation for your data. 
-See http://libraryguides.vu.edu.au/c.php?g=386501&p=4347840 for guidance on proper citation for datasets. 
-If you got your data off the web, make sure to state the retrieval date.
+```{r, echo=TRUE}
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+# Model Evaluation
+
+To evaluate our logistic regression model, we plotted an ROC curve to evaluate the percentage of variability in _finished_ that is predicted by our model with _driver_, _team_group_, and _location_. We obtained an AUC value of 0.563 for this model, which suggests that our model does slightly better than random (0.5), suggesting that while weak, the combination of driver, team and location do have an impact on whether they finish the race. 
+
+``` {r model with 3, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
 
 
+raceresults_rec <- recipe(finished_fct ~ driver + team_group + location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
 
-Our data set contains data from Formula E races across Seasons 1-7. There are 1,480 observations, each representing a particular driver in a particular race. There are 17 variables including the driver, the driver's team, the season number, the race number within the season and the season points awarded.
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
 
-Season number is between 1 and 7, with Season 7 being incomplete as the data set was produced during this season. (Season 7 contains only 48 observations compared to 180-290 observations in the other 6 seasons)
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
 
-Race number varies between 1 and 13 showing that there are up to 13 races in any given season. This is sequential meaning race number can be used to track performance from start to end of the season.
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
 
-Season points shows how a driver performed during the race. A driver who scored a non-zero number of season points finished in the top 10, with more points meaning a higher finish. A season point score of 0 means the driver did not finish in the top 10 for the race.
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
 
-After cleaning the data, we also includes a new variable called finish, where we can see whether the driver finish their race or not.
+```{r roc 3, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
 
-*Citation*
+All combinations of 1 and 2 variables yield lower AUC results, suggesting this is not an overfitting, however the _location_ variable on its own yields almost just as good a model as the three of them together (0.558). 
+
+``` {r model with location, include = FALSE}
+set.seed(28)
+raceresults_split <- initial_split(raceresults_factored)
+raceresults_train <- training(raceresults_split)
+raceresults_test <- testing(raceresults_split)
+
+
+raceresults_rec <- recipe(finished_fct ~ location, data = raceresults_train) %>%
+  step_dummy(all_nominal(), -all_outcomes())
+
+raceresults_mod <- logistic_reg() %>%
+  set_engine("glm")
+
+raceresults_wflow <- workflow() %>%
+  add_recipe(raceresults_rec) %>%
+  add_model(raceresults_mod)
+
+raceresults_fit <- raceresults_wflow %>%
+  fit(data = raceresults_train)
+tidy(raceresults_fit)
+
+raceresults_pred <- predict(raceresults_fit, raceresults_test, type = "prob") %>%
+  bind_cols(raceresults_test)
+raceresults_pred
+```
+
+``` {r roc location, echo = FALSE}
+raceresults_pred %>%
+  roc_curve(
+    truth = finished_fct,
+    .pred_TRUE,
+    event_level = "first"
+  ) %>%
+  autoplot()
+```
+
+This suggests that location is the most important indicator and in fact that considering driver and team do not have as much of a meaningful impact on whether a driver finishes the race. In the case of driver, this is perhaps because any drivers who have a track record of regularly crashing will quickly lose their sponsorship or stop competing, meaning they have been filtered out before modelling due to not having competed at least 20 times. 
+
+Ultimately however, these AUC values close to the random estimate value of 0.5 show that we cannot say for sure that driver, team and/or location are strong predictors of whether a driver finishes, and so of driver performance. 
+
+# Summary
+
+In conclusion, our investigation of driver performance in Formula E races suggests that the driver, team and location of a race do have a marginal impact on whether a driver finishes the race, and so on driver performance. However, the inconclusive nature of these results suggests that further study is required to understand whether other factors we have not considered, for example the weather on race days, might be more impactful.
+
+# Citation
 M. Landry. (2021). 'Formula E Championship'. Available at https://www.kaggle.com/datasets/mlandry/formula-e-championship/data. Accessed 18/10/2024.
-
-
-## Findings
-Methodology:
-
-1) Data Cleaning
-To clean and filter by location, since all race locations have a year at the end of the name, we used the function “str_detect” to detect a certain word in the race location to filter by actual location of races. 
-There were some name inconsistencies, for example, “Ad Diriyah” and “Diriyah” were both used, but after researching, we concluded they were interchangeable names, and we grouped them. A similar problem arose with “Swiss” and “Zurich”, but after doing research into Formula E race locations online, “Swiss” races were held in Bern, so to remain consistent, we turned “Swiss” into “Bern” to differentiate from “Zurich” as all other races were city names rather than countries.
-We also used “retired_time” as a binary variable, to detect whether they finished the race or not.
-We successfully tidied the data, making the table only 5 columns so it’s much easier to work with.
-
-2) Data Visualisation
-
-
-3) Modelling 
-We use logistic regression to predict weather the driver finishes or not finish the race. We chose logistic regression as the model as our output is binary, which is either the driver finished their race or not. 
-We use R squared test to see which variable to be considered as explanatory variable that affect if the driver finished or not.
-
-The write-up of your project and findings go here. 
-
-Think of this as the text of your presentation with some extra detail to cover what there was not time to discuss in the presentation. This might include any assumptions you made when doing your analysis, any limitations of the work you have done or any ideas you have for future work. Feel free to split this section into subsections to make it easier to read. 
-
-The length should be roughly 1,500 words. 
-If you want to use a word count addin, you can install this by copying and pasting the following into RStudio:
-
-`devtools::install_github("benmarwick/wordcountaddin", type = "source", dependencies = TRUE)`
-
-You will then need to restart RStudio. Once you have done that, select the text you want to count the words of, go to Addins, and select the `Word count` addin.
-This addin counts words using two different algorithms, but the results should be similar and as long as you're in the ballpark of 1,500 words, you're good! 
-The addin will ignore code chunks and only count the words in prose. If you don't want to use the addin you can always copy and paste the text into Microsoft Word to do a Word Count!
-
-You can also load your data here and present any analysis results / plots.
-Make sure to hide your code with  `echo = FALSE` unless the point you are trying to make is about the code itself, in which case you should show your code.
-
-
-
-
-
-## References
-
-M. Landry. (2021). 'Formula E Championship'. Available at https://www.kaggle.com/datasets/mlandry/formula-e-championship/data. Accessed 18/10/2024.
-
